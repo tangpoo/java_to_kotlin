@@ -1,17 +1,35 @@
 plugins {
-    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version "1.9.10" // 최신 Kotlin Plugin 버전으로 변경
 }
 
-group = 'com.midfcst'
+group = 'io.java_to_kotlin'
 version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.15.2" // 최신 Jackson 버전으로 변경
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.2"
+
+    testImplementation platform('org.junit:junit-bom:5.10.0') // 최신 JUnit BOM 버전으로 변경
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
+        javaParameters = true
+        freeCompilerArgs = ["-Xjvm-default=all"]
+    }
 }
 
 test {
