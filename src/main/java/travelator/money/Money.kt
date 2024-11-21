@@ -1,62 +1,43 @@
-package travelator.money;
+package travelator.money
 
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.Objects;
+import java.math.BigDecimal
+import java.util.*
 
-public class Money {
-    private final BigDecimal amount;
-    private final Currency currency;
-
-    private Money(final BigDecimal amount, final Currency currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
-
-    public static Money of(BigDecimal amount, Currency currency) {
-        return new Money(
-            amount.setScale(currency.getDefaultFractionDigits()),
-            currency
-        );
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
+class Money private constructor(
+        val amount: BigDecimal,
+        val currency: Currency
+) {
+    override fun equals(o: Any?): Boolean {
+        if (this === o) {
+            return true
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
+        if (o == null || javaClass != o.javaClass) {
+            return false
         }
-        final Money money = (Money) o;
-        return Objects.equals(amount, money.amount) && Objects.equals(currency,
-            money.currency);
+        val money = o as Money
+        return amount == money.amount && currency == money.currency
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount, currency);
+    override fun hashCode(): Int {
+        return Objects.hash(amount, currency)
     }
 
-    @Override
-    public String toString() {
-        return amount.toString() + " " + currency.getCurrencyCode();
+    override fun toString(): String {
+        return amount.toString() + " " + currency.currencyCode
     }
 
-    public Money add(Money that) {
-        if (!this.currency.equals(that.currency)) {
-            throw new IllegalArgumentException(
-                "cannot add Money values of different currencies"
-            );
+    fun add(that: Money): Money {
+        require(currency == that.currency) { "cannot add Money values of different currencies" }
+        return Money(amount.add(that.amount), this.currency)
+    }
+
+    companion object {
+        @JvmStatic
+        fun of(amount: BigDecimal, currency: Currency): Money {
+            return Money(
+                    amount.setScale(currency.defaultFractionDigits),
+                    currency
+            )
         }
-        return new Money(this.amount.add(that.amount), this.currency);
     }
 }
