@@ -1,4 +1,4 @@
-package emailaddress
+package travelator.emailaddress
 
 data class EmailAddress(val localPart: String,
                    val domain: String) {
