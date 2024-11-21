@@ -1,57 +1,35 @@
-package emailaddress;
+package emailaddress
 
-import java.util.Objects;
+import java.util.*
 
-public class EmailAddress {
-    private final String localPart;
-    private final String domain;
-
-    public static EmailAddress parse(String value) {
-        var atIndex = value.lastIndexOf('@');
-        if (atIndex < 1 || atIndex == value.length() - 1) {
-            throw new IllegalArgumentException(
-                "EmailAddress must be two parts separated by @"
-            );
+class EmailAddress(val localPart: String, val domain: String) {
+    override fun equals(o: Any?): Boolean {
+        if (this === o) {
+            return true
         }
-        return new EmailAddress(
-            value.substring(0, atIndex),
-            value.substring(atIndex + 1)
-        );
-    }
-
-    public EmailAddress(final String localPart, final String domain) {
-        this.localPart = localPart;
-        this.domain = domain;
-    }
-
-    public String getLocalPart() {
-        return localPart;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
+        if (o == null || javaClass != o.javaClass) {
+            return false
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
+        val that = o as EmailAddress
+        return localPart == that.localPart && domain == that.domain
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(localPart, domain)
+    }
+
+    override fun toString(): String {
+        return "$localPart@$domain"
+    }
+
+    companion object {
+        fun parse(value: String): EmailAddress {
+            val atIndex = value.lastIndexOf('@')
+            require(!(atIndex < 1 || atIndex == value.length - 1)) { "EmailAddress must be two parts separated by @" }
+            return EmailAddress(
+                    value.substring(0, atIndex),
+                    value.substring(atIndex + 1)
+            )
         }
-        final EmailAddress that = (EmailAddress) o;
-        return Objects.equals(localPart, that.localPart) && Objects.equals(domain,
-            that.domain);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(localPart, domain);
-    }
-
-    @Override
-    public String toString() {
-        return localPart + "@" + domain;
     }
 }
