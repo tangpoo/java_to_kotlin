@@ -20,19 +20,19 @@ class LongestLegOverTests {
 
     @Test
     fun `is absent when no legs`() {
-        assertNull(longestLegOver(emptyList(), Duration.ZERO))
+        assertNull(emptyList().longestLegOver(Duration.ZERO))
     }
 
     @Test
     fun `is absent when no legs long enough`() {
-        assertNull(longestLegOver(legs, oneDay))
+        assertNull(legs.longestLegOver(oneDay))
     }
 
     @Test
     fun `is longest leg when one match`() {
         assertEquals(
                 "one day",
-                longestLegOver(legs, Duration.ofMillis(1))
+                legs.longestLegOver(Duration.ofMillis(1))
                         !!.description
         )
     }
@@ -41,7 +41,7 @@ class LongestLegOverTests {
     fun `is longest leg when more than one match`() {
         assertEquals(
                 "one day",
-                longestLegOver(legs, Duration.ofMinutes(59))
+                legs.longestLegOver(Duration.ofMinutes(59))
                         ?.description
         )
     }

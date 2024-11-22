@@ -10,13 +10,18 @@ object Legs {
             legs: List<Leg>,
             duration: Duration
     ): Optional<Leg> {
-        return Optional.ofNullable(longestLegOver(legs, duration))
+        return Optional.ofNullable(legs.longestLegOver(duration))
     }
 
-    fun longestLegOver(legs: List<Leg>, duration: Duration): Leg? =
-        legs.maxByOrNull(Leg::plannedDuration)?.takeIf { longestLeg ->
-            longestLeg.plannedDuration > duration
+    fun List<Leg>.longestLegOver(duration: Duration): Leg? {
+        val longestLeg = maxByOrNull(Leg::plannedDuration)
+
+        return when {
+            longestLeg == null -> null
+            longestLeg.plannedDuration > duration -> longestLeg
+            else  -> null
         }
+    }
 
 
 private fun Leg.isLongerThan(duration: Duration) =
