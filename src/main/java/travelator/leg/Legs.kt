@@ -10,6 +10,10 @@ object Legs {
             legs: List<Leg>,
             duration: Duration
     ): Optional<Leg> {
+        return Optional.ofNullable(longestLegOver(legs, duration))
+    }
+
+    fun longestLegOver(legs: List<Leg>, duration: Duration): Leg? {
         var result: Leg? = null
         for (leg in legs) {
             if (isLongerThan(leg, duration)) {
@@ -20,8 +24,9 @@ object Legs {
                 }
             }
         }
-        return Optional.ofNullable(result)
+        return result
     }
+
 
     private fun isLongerThan(leg: Leg, duration: Duration): Boolean {
         return leg.plannedDuration.compareTo(duration) > 0

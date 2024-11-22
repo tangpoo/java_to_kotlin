@@ -1,68 +1,57 @@
-package travelator;
+package travelator
 
-import static java.util.Collections.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static travelator.leg.Legs.findLongestLegOver;
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
+import travelator.leg.Leg
+import travelator.leg.Legs.longestLegOver
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.concurrent.ThreadLocalRandom
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
-import org.junit.jupiter.api.Test;
-import travelator.leg.Leg;
-import travelator.leg.Legs;
-
-public class LongestLegOverTests {
-
-    private final List<Leg> legs = List.of(
-        leg("one hour", Duration.ofHours(1)),
-        leg("one day", Duration.ofDays(1)),
-        leg("two hours", Duration.ofHours(2))
-    );
-    private final Duration oneDay = Duration.ofDays(1);
+class LongestLegOverTests {
+    private val legs: List<Leg> = java.util.List.of(
+            leg("one hour", Duration.ofHours(1)),
+            leg("one day", Duration.ofDays(1)),
+            leg("two hours", Duration.ofHours(2))
+    )
+    private val oneDay: Duration = Duration.ofDays(1)
 
     @Test
-    public void is_absent_when_no_legs() {
-        assertEquals(
-            Optional.empty(),
-            findLongestLegOver(emptyList(), Duration.ZERO)
-        );
+    fun `is absent when no legs`() {
+        assertNull(longestLegOver(emptyList(), Duration.ZERO))
     }
 
     @Test
-    public void is_absent_when_no_legs_long_enough() {
-        assertEquals(
-            Optional.empty(),
-            findLongestLegOver(legs, oneDay)
-        );
+    fun `is absent when no legs long enough`() {
+        assertNull(longestLegOver(legs, oneDay))
     }
 
     @Test
-    public void is_longest_leg_when_one_match() {
+    fun `is longest leg when one match`() {
         assertEquals(
-            "one day",
-            findLongestLegOver(legs, Duration.ofMillis(1))
-                .orElseThrow().getDescription()
-        );
+                "one day",
+                longestLegOver(legs, Duration.ofMillis(1))
+                        !!.description
+        )
     }
 
     @Test
-    public void is_longest_leg_when_more_than_one_match() {
+    fun `is longest leg when more than one match`() {
         assertEquals(
-            "one day",
-            findLongestLegOver(legs, Duration.ofMinutes(59))
-                .orElseThrow().getDescription()
-        );
+                "one day",
+                longestLegOver(legs, Duration.ofMinutes(59))
+                        ?.description
+        )
     }
 
-    private static final Leg leg(String description, Duration duration) {
-        var start = ZonedDateTime.ofInstant(
-            Instant.ofEpochSecond(ThreadLocalRandom.current().nextInt()),
-            ZoneId.of("UTC"));
-        return new Leg(description, start, start.plus(duration));
+    companion object {
+        private fun leg(description: String, duration: Duration): Leg {
+            val start = ZonedDateTime.ofInstant(
+                    Instant.ofEpochSecond(ThreadLocalRandom.current().nextInt().toLong()),
+                    ZoneId.of("UTC"))
+            return Leg(description, start, start.plus(duration))
+        }
     }
 }
