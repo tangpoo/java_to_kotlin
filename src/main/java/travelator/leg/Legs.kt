@@ -14,21 +14,15 @@ object Legs {
     }
 
     fun longestLegOver(legs: List<Leg>, duration: Duration): Leg? {
-        var result: Leg? = null
-        for (leg in legs) {
-            if (isLongerThan(leg, duration)) {
-                if (result == null ||
-                        isLongerThan(leg, result.plannedDuration)
-                ) {
-                    result = leg
-                }
-            }
-        }
-        return result
+        val longestLeg: Leg? = legs.maxByOrNull(Leg::plannedDuration)
+        return if (longestLeg != null && longestLeg.plannedDuration > duration)
+            longestLeg
+        else
+            null
     }
 
 
-    private fun isLongerThan(leg: Leg, duration: Duration): Boolean {
-        return leg.plannedDuration.compareTo(duration) > 0
-    }
+    private fun Leg.isLongerThan(duration: Duration) =
+            plannedDuration > duration
+
 }
