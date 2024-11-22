@@ -3,6 +3,7 @@ package travelator
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import travelator.leg.Leg
+import travelator.leg.Legs
 import travelator.leg.Legs.longestLegOver
 import java.time.Duration
 import java.time.Instant
@@ -20,19 +21,19 @@ class LongestLegOverTests {
 
     @Test
     fun `is absent when no legs`() {
-        assertNull(emptyList().longestLegOver(Duration.ZERO))
+        assertNull(longestLegOver(emptyList(), Duration.ZERO))
     }
 
     @Test
     fun `is absent when no legs long enough`() {
-        assertNull(legs.longestLegOver(oneDay))
+        assertNull(longestLegOver(legs, oneDay))
     }
 
     @Test
     fun `is longest leg when one match`() {
         assertEquals(
                 "one day",
-                legs.longestLegOver(Duration.ofMillis(1))
+                longestLegOver(legs, Duration.ofMillis(1))
                         !!.description
         )
     }
@@ -41,7 +42,7 @@ class LongestLegOverTests {
     fun `is longest leg when more than one match`() {
         assertEquals(
                 "one day",
-                legs.longestLegOver(Duration.ofMinutes(59))
+                longestLegOver(legs, Duration.ofMinutes(59))
                         ?.description
         )
     }
