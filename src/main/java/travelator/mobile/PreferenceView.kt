@@ -2,7 +2,7 @@ package travelator.mobile
 
 import java.util.*
 
-class PreferenceView(private val preferences: UserPreference) : View() {
+class PreferenceView(private var preferences: UserPreference) : View() {
     private val greetingPicker = GreetingPicker()
     private val localePicker = LocalePicker()
     private val currencyPicker = CurrencyPicker()
