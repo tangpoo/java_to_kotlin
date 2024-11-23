@@ -1,18 +1,11 @@
-package travelator.mobile;
+package travelator.mobile
 
-public class Application {
-
-    private final UserPreference preference;
-
-    public Application(final UserPreference preference) {
-        this.preference = preference;
+class Application(private var preference: UserPreference) {
+    fun showWelcome() {
+        WelcomeView(preference).show()
     }
 
-    public void showWelcome() {
-        new WelcomeView(preference).show();
-    }
-
-    public void editPreferences() {
-        new PreferenceView(preference).show();
+    fun editPreferences() {
+        preference = PreferenceView(preference).showModal()
     }
 }
