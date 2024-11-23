@@ -7,11 +7,12 @@ class PreferenceView(private val preferences: UserPreference) : View() {
     private val localePicker = LocalePicker()
     private val currencyPicker = CurrencyPicker()
 
-    override fun show() {
+    fun showModal(): UserPreference {
         greetingPicker.greeting = preferences.greeting
         localePicker.locale = preferences.locale
         currencyPicker.currency = preferences.currency
         super.show()
+        return preferences
     }
 
     protected fun onGreetingChange() {
