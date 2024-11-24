@@ -7,7 +7,7 @@ object Suffering {
     @JvmStatic
     fun sufferScoreFor(route: List<Journey>): Int {
         return sufferScore(
-                route.longestJourneysIn(3),
+                route.longestJourneysIn(limit = 3),
                 Routes.getDepartsFrom(route))
     }
 
