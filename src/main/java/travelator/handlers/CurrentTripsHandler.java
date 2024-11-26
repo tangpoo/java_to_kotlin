@@ -6,6 +6,7 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
 import travelator.http.Request;
 import travelator.http.Response;
 import travelator.trips.ITrackTrips;
@@ -22,7 +23,10 @@ public class CurrentTripsHandler {
                 .findFirst();
             if (customerId.isEmpty())
                 return new Response(HTTP_BAD_REQUEST);
-            var currentTrip = tracking.currentTripFor(customerId.get(), null);
+            var currentTrip = tracking.currentTripFor(
+                customerId.get(),
+                Instant.now()
+            );
             return currentTrip.isPresent() ?
                 new Response(HTTP_OK,
                     objectMapper.writeValueAsString(currentTrip)) :
