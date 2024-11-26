@@ -4,6 +4,7 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.Clock;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,11 +13,7 @@ import travelator.trips.Trip;
 import travelator.trips.Trips;
 
 public class InMemoryTrips implements Trips {
-    private final Clock clock;
     private final Map<String, Set<Trip>> trips = new HashMap<>();
-    public InMemoryTrips(Clock clock) {
-        this.clock = clock;
-    }
     public void addTrip(Trip trip) {
         var existingTrips = trips.getOrDefault(
             trip.getCustomerId(),
@@ -29,9 +26,9 @@ public class InMemoryTrips implements Trips {
         return trips.getOrDefault(customerId, emptySet());
     }
     @Override
-    public Set<Trip> currentTripsFor(String customerId) {
+    public Set<Trip> currentTripsFor(String customerId, Instant at) {
         return tripsFor(customerId).stream()
-            .filter(trip -> trip.isPlannedToBeActiveAt(clock.instant()))
+            .filter(trip -> trip.isPlannedToBeActiveAt(at))
             .collect(toSet());
     }
 }

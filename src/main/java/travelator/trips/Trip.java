@@ -38,7 +38,7 @@ public class Trip {
         return !plannedStartTime.toInstant().isAfter(time)
             && plannedEndTime.toInstant().isAfter(time);
     }
-    enum BookingStatus {
+    public enum BookingStatus {
         BOOKED, NOT_BOOKED
     }
 }
