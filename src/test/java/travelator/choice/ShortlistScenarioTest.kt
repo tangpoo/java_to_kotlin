@@ -9,6 +9,7 @@ class ShortlistScenarioTest {
             override val price: Int,
             override val rating: Double
     ) : HasRelevance, HasPrice, HasRating
+
     val theGrand = HotelSearchResult(
             name = "The Grand",
             relevance = 1.0,
@@ -27,25 +28,30 @@ class ShortlistScenarioTest {
             price = 200,
             rating = 3.9
     )
+
     @Test
     fun scenario() {
         val hotels = shortlistOf(theGrand, sheridanImperial, artHotel)
-        val hotelByRelevance = sorted(hotels, byRelevance())
+        val hotelByRelevance = hotels.sortedWith(byRelevance())
         show(hotelByRelevance, "By Relevance")
-        val hotelsByPrice = sorted(hotels, byPriceLowToHigh())
+        val hotelsByPrice = hotels.sortedWith(byPriceLowToHigh())
         show(hotelsByPrice, "By Price (low to high)")
+
         println("Rejecting: ${hotelsByPrice[0].name}")
-        val desirableHotels = removeItemAt(hotelsByPrice, 0)
+        val desirableHotels = hotelsByPrice.withoutItemAt(0)
         show(desirableHotels, "Remaining shortlist")
-        val desirableHotelsByRating = sorted(desirableHotels, byRating())
+
+        val desirableHotelsByRating = desirableHotels.sortedWith(byRating())
         show(desirableHotelsByRating, "By rating")
-        val desirableHotelsByValue = sorted(desirableHotels, byValue())
+        val desirableHotelsByValue = desirableHotels.sortedWith(byValue())
         show(desirableHotelsByValue, "By value")
         println("Chosen: ${desirableHotelsByValue[0].name}")
     }
+
     private fun show(hotels: List<HotelSearchResult>, ordering: String) {
         println("$ordering: ${hotels.map { it.name }.joinToString(", ")}")
     }
+
     private fun <T> shortlistOf(vararg items: T): List<T> =
             java.util.List.of(*items)
 }
