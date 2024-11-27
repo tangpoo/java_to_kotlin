@@ -1,10 +1,10 @@
 package travelator.choice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static travelator.choice.Shortlists.byPriceLowToHigh;
-import static travelator.choice.Shortlists.byRating;
-import static travelator.choice.Shortlists.byRelevance;
-import static travelator.choice.Shortlists.sorted;
+import static travelator.choice.ShortlistsKt.byPriceLowToHigh;
+import static travelator.choice.ShortlistsKt.byRating;
+import static travelator.choice.ShortlistsKt.byRelevance;
+import static travelator.choice.ShortlistsKt.sorted;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class ShortlistsTest {
     }
     @Test
     public void bestValue() {
-        var reordered = sorted(items, Shortlists.byValue());
+        var reordered = sorted(items, ShortlistsKt.byValue());
         assertEquals(shortlistOf(c, b, a, d), reordered);
     }
     @Test
