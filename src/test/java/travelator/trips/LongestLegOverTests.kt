@@ -1,9 +1,8 @@
-package travelator
+package travelator.trips
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import travelator.leg.Leg
-import travelator.leg.Legs
 import travelator.leg.Legs.longestLegOver
 import java.time.Duration
 import java.time.Instant

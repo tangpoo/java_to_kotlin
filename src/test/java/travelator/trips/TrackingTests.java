@@ -1,4 +1,4 @@
-package travelator;
+package travelator.trips;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,9 +9,6 @@ import static travelator.trips.Trip.BookingStatus.NOT_BOOKED;
 import java.time.Instant;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import travelator.testing.StoppedClock;
-import travelator.trips.Tracking;
-import travelator.trips.Trip;
 
 public class TrackingTests {
     final InMemoryTrips trips = new InMemoryTrips();

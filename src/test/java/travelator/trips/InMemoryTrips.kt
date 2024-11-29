@@ -1,7 +1,5 @@
-package travelator
+package travelator.trips
 
-import travelator.trips.Trip
-import travelator.trips.Trips
 import java.time.Instant
 
 class InMemoryTrips : Trips {
