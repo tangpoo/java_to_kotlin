@@ -44,7 +44,7 @@ fun customerDataFrom(line: String): CustomerData {
 }
 
 private fun lineFor(customer: CustomerData): String {
-    return customer.id + "\t" + marketingNameFor(customer) + "\t" +
+    return customer.id + "\t" + customer.marketingName + "\t" +
             formatMoney(customer.spend)
 }
 
@@ -52,7 +52,6 @@ private fun formatMoney(money: Double): String {
     return String.format("%#.2f", money)
 }
 
-private fun marketingNameFor(customer: CustomerData): String {
-    return customer.familyName.uppercase(Locale.getDefault()) + ", " + customer.givenName
-}
+private val CustomerData.marketingName: String
+    get() = "${familyName.uppercase(Locale.getDefault())}, $givenName"
 
