@@ -1,33 +1,33 @@
 package travelator.marketing
 
-import java.io.BufferedReader
 import java.io.IOException
 import java.io.Reader
 import java.io.Writer
 import java.util.*
-import java.util.stream.Collectors
 
 
 @Throws(IOException::class)
-fun generate(reader: Reader?, writer: Writer) {
-    val valuableCustomers = BufferedReader(reader).lines()
-            .skip(1) // header
-            .map { line: String -> line.toCustomerData() }
-            .filter { customerData: CustomerData -> customerData.score >= 10 }
-            .sorted(Comparator.comparing { customerData: CustomerData -> customerData.score })
-            .collect(Collectors.toList())
-    writer.append("ID\tName\tSpend\n")
+fun generate(reader: Reader, writer: Writer) {
+    val valuableCustomers = reader.readLines()
+            .toValuableCustomers()
+            .sortedBy(CustomerData::score)
+    writer.appendLine("ID\tName\tSpend\n")
     for (customerData in valuableCustomers) {
-        writer.append(lineFor(customerData)).append("\n")
+        writer.appendLine(customerData.outputLine)
     }
-    writer.append(valuableCustomers.toSummary())
+    writer.append(valuableCustomers.summarised())
 }
 
-private fun List<CustomerData>.toSummary(): String =
-    sumOf { it.spend }.let { total ->
-        "\tTOTAL\t" + total.toMoneyString() }
+private fun List<String>.toValuableCustomers() = withoutHeader()
+        .map(String::toCustomerData)
+        .filter { it.score >= 10 }
 
+private fun List<String>.withoutHeader() = drop(1)
 
+private fun List<CustomerData>.summarised(): String =
+        sumOf { it.spend }.let { total ->
+            "\tTOTAL\t" + total.toMoneyString()
+        }
 
 fun String.toCustomerData(): CustomerData =
         split("\t").let { parts ->
@@ -40,10 +40,8 @@ fun String.toCustomerData(): CustomerData =
             )
         }
 
-private fun lineFor(customer: CustomerData): String {
-    return customer.id + "\t" + customer.marketingName + "\t" +
-            customer.spend.toMoneyString()
-}
+private val CustomerData.outputLine: String
+    get() = "$id\t$marketingName\t${spend.toMoneyString()}"
 
 private fun Double.toMoneyString() = this.formattedAs("%#.2f")
 
