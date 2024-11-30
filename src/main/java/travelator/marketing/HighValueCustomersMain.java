@@ -10,7 +10,7 @@ public class HighValueCustomersMain {
             var reader = new InputStreamReader(System.in);
             var writer = new OutputStreamWriter(System.out)
         ) {
-            HighValueCustomersReport.generate(reader, writer);
+            HighValueCustomersReportKt.generate(reader, writer);
         }
     }
 }

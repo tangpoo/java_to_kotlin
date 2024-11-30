@@ -12,7 +12,7 @@ import java.util.stream.Collectors
 fun generate(reader: Reader?, writer: Writer) {
     val valuableCustomers = BufferedReader(reader).lines()
             .skip(1) // header
-            .map { line: String -> customerDataFrom(line) }
+            .map { line: String -> line.toCustomerData() }
             .filter { customerData: CustomerData -> customerData.score >= 10 }
             .sorted(Comparator.comparing { customerData: CustomerData -> customerData.score })
             .collect(Collectors.toList())
@@ -20,27 +20,25 @@ fun generate(reader: Reader?, writer: Writer) {
     for (customerData in valuableCustomers) {
         writer.append(lineFor(customerData)).append("\n")
     }
-    writer.append(summaryFor(valuableCustomers))
+    writer.append(valuableCustomers.toSummary())
 }
 
-private fun summaryFor(valuableCustomers: List<CustomerData>): String {
-    val total = valuableCustomers.stream()
-            .mapToDouble { customerData: CustomerData -> customerData.spend }
-            .sum()
-    return "\tTOTAL\t" + total.toMoneyString()
-}
+private fun List<CustomerData>.toSummary(): String =
+    sumOf { it.spend }.let { total ->
+        "\tTOTAL\t" + total.toMoneyString() }
 
 
-fun customerDataFrom(line: String): CustomerData {
-    val parts = line.split("\t")
-    return CustomerData(
-            id = parts[0],
-            givenName = parts[1],
-            familyName = parts[2],
-            score = parts[3].toInt(),
-            spend = if (parts.size == 4) 0.0 else parts[4].toDouble()
-    )
-}
+
+fun String.toCustomerData(): CustomerData =
+        split("\t").let { parts ->
+            CustomerData(
+                    id = parts[0],
+                    givenName = parts[1],
+                    familyName = parts[2],
+                    score = parts[3].toInt(),
+                    spend = if (parts.size == 4) 0.0 else parts[4].toDouble()
+            )
+        }
 
 private fun lineFor(customer: CustomerData): String {
     return customer.id + "\t" + customer.marketingName + "\t" +
