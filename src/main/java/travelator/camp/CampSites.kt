@@ -10,9 +10,6 @@ fun Set<CampSite>.sitesInRegion(
 fun CampSite.isIn(
     countryISO: String,
     region: String?
-) = when (region) {
-    null -> countryCode == countryISO
-    else -> countryCode == countryISO &&
-            region.equals(this.region, ignoreCase = true)
-}
+) = countryCode == countryISO &&
+        region?.equals(this.region, ignoreCase = true) ?: true
 
