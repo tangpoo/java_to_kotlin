@@ -26,7 +26,8 @@ class Money private constructor(
         return amount.toString() + " " + currency.currencyCode
     }
 
-    @JvmName("add")
+    fun add(that: Money): Money = this + that
+
     operator fun plus(that: Money): Money {
         require(currency == that.currency) { "cannot add Money values of different currencies" }
         return Money(amount.add(that.amount), this.currency)
