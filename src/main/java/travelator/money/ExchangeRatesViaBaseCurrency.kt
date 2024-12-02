@@ -1,41 +1,32 @@
-package travelator.money;
+package travelator.money
 
-import static java.math.BigDecimal.ONE;
-import static java.math.RoundingMode.HALF_EVEN;
-import static java.math.RoundingMode.UNNECESSARY;
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.*
 
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.Map;
+class ExchangeRatesViaBaseCurrency @SafeVarargs constructor(
+    private val baseCurrency: Currency,
+    vararg rates: Map.Entry<Currency?, BigDecimal>
+) : ExchangeRates {
+    private val rates: MutableMap<Currency?, BigDecimal> = HashMap()
 
-public class ExchangeRatesViaBaseCurrency implements ExchangeRates {
-
-    private final Currency baseCurrency;
-    private final Map<Currency, BigDecimal> rates = new HashMap<>();
-
-    @SafeVarargs
-    public ExchangeRatesViaBaseCurrency(
-        Currency baseCurrency,
-        Map.Entry<Currency, BigDecimal>... rates) {
-        this.baseCurrency = baseCurrency;
-        for (var rate : rates) {
-            this.rates.put(rate.getKey(), asRate(rate.getValue()));
+    init {
+        for (rate in rates) {
+            this.rates[rate.key] = asRate(rate.value)
         }
     }
 
-    @Override
-    public BigDecimal rate(Currency fromCurrency, Currency toCurrency) {
-        var fromRate = baseRate(fromCurrency);
-        var toRate = baseRate(toCurrency);
-        return toRate.divide(fromRate, HALF_EVEN);
+    override fun rate(fromCurrency: Currency?, toCurrency: Currency?): BigDecimal {
+        val fromRate = baseRate(fromCurrency)
+        val toRate = baseRate(toCurrency)
+        return toRate.divide(fromRate, RoundingMode.HALF_EVEN)
     }
 
-    private BigDecimal baseRate(Currency c) {
-        return c.equals(baseCurrency) ? asRate(ONE) : rates.get(c);
+    private fun baseRate(c: Currency?): BigDecimal {
+        return if (c == baseCurrency) asRate(BigDecimal.ONE) else rates[c]!!
     }
 
-    private BigDecimal asRate(BigDecimal value) {
-        return value.setScale(6, UNNECESSARY);
+    private fun asRate(value: BigDecimal): BigDecimal {
+        return value.setScale(6, RoundingMode.UNNECESSARY)
     }
 }

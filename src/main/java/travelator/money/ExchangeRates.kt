@@ -1,17 +1,17 @@
-package travelator.money;
+package travelator.money
 
-import java.math.BigDecimal;
-import java.util.Currency;
+import travelator.money.Money.Companion.of
+import java.math.BigDecimal
+import java.util.*
 
-public interface ExchangeRates {
+interface ExchangeRates {
+    fun rate(fromCurrency: Currency?, toCurrency: Currency?): BigDecimal
 
-    BigDecimal rate(Currency fromCurrency, Currency toCurrency);
+    fun convert(fromMoney: Money, toCurrency: Currency?): CurrencyConversion? {
+        val rate = rate(fromMoney.currency, toCurrency)
+        val toAmount = fromMoney.amount.multiply(rate)
+        val toMoney = of(toAmount, toCurrency!!)
 
-    default CurrencyConversion convert(Money fromMoney, Currency toCurrency) {
-        BigDecimal rate = rate(fromMoney.getCurrency(), toCurrency);
-        BigDecimal toAmount = fromMoney.getAmount().multiply(rate);
-        Money toMoney = Money.of(toAmount, toCurrency);
-
-        return new CurrencyConversion(fromMoney, toMoney);
+        return CurrencyConversion(fromMoney, toMoney)
     }
 }
