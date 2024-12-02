@@ -4,8 +4,8 @@ import java.math.BigDecimal
 import java.util.*
 
 class Money private constructor(
-        val amount: BigDecimal,
-        val currency: Currency
+    val amount: BigDecimal,
+    val currency: Currency
 ) {
     override fun equals(o: Any?): Boolean {
         if (this === o) {
@@ -30,15 +30,15 @@ class Money private constructor(
 
     operator fun plus(that: Money): Money {
         require(currency == that.currency) { "cannot add Money values of different currencies" }
-        return Money(amount.add(that.amount), this.currency)
+        return Money(this.amount + that.amount, this.currency)
     }
 
     companion object {
         @JvmStatic
         fun of(amount: BigDecimal, currency: Currency): Money {
             return Money(
-                    amount.setScale(currency.defaultFractionDigits),
-                    currency
+                amount.setScale(currency.defaultFractionDigits),
+                currency
             )
         }
     }
