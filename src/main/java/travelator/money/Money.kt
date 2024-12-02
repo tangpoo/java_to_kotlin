@@ -35,11 +35,13 @@ class Money private constructor(
 
     companion object {
         @JvmStatic
-        fun of(amount: BigDecimal, currency: Currency): Money {
-            return Money(
+        fun of(amount: BigDecimal, currency: Currency): Money =
+            this(amount, currency)
+
+        operator fun invoke(amount: BigDecimal, currency: Currency) =
+            Money(
                 amount.setScale(currency.defaultFractionDigits),
                 currency
             )
-        }
     }
 }
