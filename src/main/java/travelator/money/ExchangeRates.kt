@@ -10,7 +10,7 @@ interface ExchangeRates {
     fun convert(fromMoney: Money, toCurrency: Currency?): CurrencyConversion? {
         val rate = rate(fromMoney.currency, toCurrency)
         val toAmount = fromMoney.amount.multiply(rate)
-        val toMoney = of(toAmount, toCurrency!!)
+        val toMoney = Money(toAmount, toCurrency!!)
 
         return CurrencyConversion(fromMoney, toMoney)
     }
