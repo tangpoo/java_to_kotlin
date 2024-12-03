@@ -20,12 +20,10 @@ class MarketingAnalytics(
             eventsForSuccessfulBookings.collect(
                 Collectors.groupingBy { event -> event["interactionId"] as String? }
             )
-        val averageNumberOfEventsPerCompletedBooking =
-            bookingEventsByInteractionId
+        val averageNumberOfEventsPerCompletedBooking = bookingEventsByInteractionId
                 .values
-                .stream()
-                .mapToInt { it.size }
+                .map { it.size }
                 .average()
-        return averageNumberOfEventsPerCompletedBooking.orElse(Double.NaN)
+        return averageNumberOfEventsPerCompletedBooking
     }
 }
