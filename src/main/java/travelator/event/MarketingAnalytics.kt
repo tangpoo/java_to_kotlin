@@ -10,15 +10,16 @@ class MarketingAnalytics(
     fun averageNumberOfEventsPerCompletedBooking(
         timeRange: String
     ): Double {
-        val eventsForSuccessfulBookings =
-            eventStore
+        val eventsForSuccessfulBookings = eventStore
                 .queryAsStream("type=CompletedBooking&timerange=$timeRange")
+                .asSequence()
                 .flatMap { event ->
                     val interactionId = event["interactionId"] as String?
-                    eventStore.queryAsStream("interactionId=$interactionId")
+                    eventStore
+                        .queryAsStream("interactionId=$interactionId")
+                        .asSequence()
                 }
         val bookingEventsByInteractionId = eventsForSuccessfulBookings
-            .asSequence()
             .groupBy { event ->
                 event["interactionId"] as String
             }
