@@ -11,13 +11,11 @@ class MarketingAnalytics(
         timeRange: String
     ): Double {
         val eventsForSuccessfulBookings = eventStore
-                .queryAsStream("type=CompletedBooking&timerange=$timeRange")
-                .asSequence()
+                .queryAsSequence("type=CompletedBooking&timerange=$timeRange")
                 .flatMap { event ->
                     val interactionId = event["interactionId"] as String?
                     eventStore
-                        .queryAsStream("interactionId=$interactionId")
-                        .asSequence()
+                        .queryAsSequence("interactionId=$interactionId")
                 }
         val bookingEventsByInteractionId = eventsForSuccessfulBookings
             .groupBy { event ->
@@ -29,3 +27,6 @@ class MarketingAnalytics(
     private fun <T> Collection<T>.averageBy(selector: (T) -> Int): Double =
         sumOf(selector) / size.toDouble()
 }
+
+fun EventStore.queryAsSequence(query: String) =
+    this.queryAsStream(query).asSequence()
