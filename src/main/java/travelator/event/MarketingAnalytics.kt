@@ -1,7 +1,5 @@
 package travelator.event
 
-import travelator.suffer.Collections
-import java.util.function.Function
 import java.util.stream.Collectors
 
 class MarketingAnalytics(
@@ -21,10 +19,9 @@ class MarketingAnalytics(
             eventsForSuccessfulBookings.collect(
                 Collectors.groupingBy { event -> event["interactionId"] as String? }
             )
-        val value = bookingEventsByInteractionId.values
-        return averageBy(value) {it.size}
+        return bookingEventsByInteractionId.values.averageBy {it.size}
     }
 
-    private fun <T> averageBy(values: Collection<T>, selector: (T) -> Int): Double =
-        values.sumOf(selector) / values.size.toDouble()
+    private fun <T> Collection<T>.averageBy(selector: (T) -> Int): Double =
+        sumOf(selector) / size.toDouble()
 }
