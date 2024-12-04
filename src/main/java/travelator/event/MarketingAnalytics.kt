@@ -1,7 +1,5 @@
 package travelator.event
 
-import java.util.stream.Collectors
-import java.util.stream.Collectors.groupingBy
 import kotlin.streams.asSequence
 
 class MarketingAnalytics(
@@ -10,19 +8,25 @@ class MarketingAnalytics(
     fun averageNumberOfEventsPerCompletedBooking(
         timeRange: String
     ): Double {
-        return eventStore
+        return allEventsInSameInteractions(
+            eventStore
                 .queryAsSequence("type=CompletedBooking&timerange=$timeRange")
-                .flatMap { event ->
-                    val interactionId = event["interactionId"] as String?
-                    eventStore
-                        .queryAsSequence("interactionId=$interactionId")
-                }
+        )
             .groupBy { event ->
                 event["interactionId"] as String
             }
             .values
             .averageBy {it.size}
     }
+
+    private fun allEventsInSameInteractions(
+        sequence: Sequence<MutableMap<String, Any>>
+                                            ): Sequence<MutableMap<String, Any>> = sequence
+        .flatMap { event ->
+            val interactionId = event["interactionId"] as String
+            eventStore
+                .queryAsSequence("interactionId=$interactionId")
+        }
 
     private fun <T> Collection<T>.averageBy(selector: (T) -> Int): Double =
         sumOf(selector) / size.toDouble()
