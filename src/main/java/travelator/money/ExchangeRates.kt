@@ -5,13 +5,12 @@ import java.math.BigDecimal
 import java.util.*
 
 interface ExchangeRates {
-    fun rate(fromCurrency: Currency?, toCurrency: Currency?): BigDecimal
+    fun rate(fromCurrency: Currency, toCurrency: Currency): BigDecimal
 
-    fun convert(fromMoney: Money, toCurrency: Currency?): CurrencyConversion? {
+    fun convert(fromMoney: Money, toCurrency: Currency): CurrencyConversion {
         val rate = rate(fromMoney.currency, toCurrency)
-        val toAmount = fromMoney.amount.multiply(rate)
-        val toMoney = Money(toAmount, toCurrency!!)
-
+        val toAmount = fromMoney.amount * rate
+        val toMoney = Money(toAmount, toCurrency)
         return CurrencyConversion(fromMoney, toMoney)
     }
 }

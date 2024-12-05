@@ -1,7 +1,6 @@
 package travelator.suffer;
 
 import java.util.List;
-import java.util.Vector;
 
 public class Routes {
 

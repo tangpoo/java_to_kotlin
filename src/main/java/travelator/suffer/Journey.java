@@ -2,6 +2,7 @@ package travelator.suffer;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import travelator.suffer.Location;
 
 public class Journey {
     private final Location departsFrom;
