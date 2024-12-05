@@ -1,25 +1,19 @@
-package travelator.itinerary;
+package travelator.itinerary
 
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import travelator.money.CurrencyConversion;
-import travelator.money.Money;
+import travelator.money.CurrencyConversion
+import travelator.money.Money
+import travelator.money.Money.Companion.of
+import java.util.*
 
-public class CostSummary {
-    private final List<CurrencyConversion> lines = new ArrayList<>();
-    private Money total;
-    public CostSummary(Currency userCurrency) {
-        this.total = Money.of(0, userCurrency);
+class CostSummary(userCurrency: Currency) {
+    private val lines: MutableList<CurrencyConversion> = ArrayList()
+    var total: Money = of(0, userCurrency)
+        private set
+
+    fun addLine(line: CurrencyConversion) {
+        lines.add(line)
+        total += line.toMoney
     }
-    public void addLine(CurrencyConversion line) {
-        lines.add(line);
-        total = total.add(line.getToMoney());
-    }
-    public List<CurrencyConversion> getLines() {
-        return List.copyOf(lines);
-    }
-    public Money getTotal() {
-        return total;
-    }
+
+    fun lines(): List<CurrencyConversion> = lines.toList()
 }
