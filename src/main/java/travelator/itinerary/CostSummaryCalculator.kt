@@ -15,14 +15,11 @@ class CostSummaryCalculator(
     }
 
     fun summarise(): CostSummary {
-        val totals = currencyTotals.values.sortedBy {
+        val conversions = currencyTotals.values.sortedBy {
             it.currency.currencyCode
-        }
-        return  CostSummary(userCurrency).apply {
-            for (total in totals) {
-                addLine(exchangeRates.convert(total, userCurrency))
-            }
-        }
+        }.map { exchangeRates.convert(it, userCurrency) }
+
+        return CostSummary(userCurrency, conversions)
     }
 
     fun reset() {
