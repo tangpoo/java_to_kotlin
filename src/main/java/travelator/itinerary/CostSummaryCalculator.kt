@@ -15,8 +15,9 @@ class CostSummaryCalculator(
     }
 
     fun summarise(): CostSummary {
-        val totals = ArrayList(currencyTotals.values)
-        totals.sortWith(Comparator.comparing { m: Money -> m.currency.currencyCode })
+        val totals = currencyTotals.values.sortedBy {
+            it.currency.currencyCode
+        }
         val summary = CostSummary(userCurrency)
         for (total in totals) {
             summary.addLine(exchangeRates.convert(total, userCurrency))
