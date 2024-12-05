@@ -6,14 +6,22 @@ import travelator.money.Money.Companion.of
 import java.util.*
 
 class CostSummary(userCurrency: Currency) {
-    private val lines: MutableList<CurrencyConversion> = ArrayList()
+    private val _lines = mutableListOf<CurrencyConversion>()
     var total: Money = of(0, userCurrency)
         private set
 
-    fun addLine(line: CurrencyConversion) {
-        lines.add(line)
-        total += line.toMoney
+    val lines: List<CurrencyConversion>
+        get() = _lines.toList()
+
+    constructor(
+        userCurrency: Currency,
+        lines: List<CurrencyConversion>
+    ): this(userCurrency) {
+        lines.forEach(::addLine)
     }
 
-    fun lines(): List<CurrencyConversion> = lines.toList()
+    fun addLine(line: CurrencyConversion) {
+        _lines.add(line)
+        total += line.toMoney
+    }
 }
