@@ -1,5 +1,6 @@
 package travelator.itinerary
 
+import travelator.money.CurrencyConversion
 import travelator.money.ExchangeRates
 import travelator.money.Money
 import java.util.*
@@ -25,11 +26,11 @@ class CostSummaryCalculator(
     }
 
     fun summarise(costs: Iterable<Money>): CostSummary {
-        val currencyTotals = mutableMapOf<Currency, Money>()
-        costs.forEach {
-            currencyTotals.merge(it.currency,it, Money::plus)
-        }
-        val lines = currencyTotals.values
+        val currencyTotals: List<Money> = costs
+            .groupBy { it.currency }
+            .values
+            .map { moneys -> moneys.reduce(Money::add) }
+        val lines: List<CurrencyConversion> = currencyTotals
             .sortedBy { it.currency.currencyCode }
             .map { exchangeRates.convert(it, userCurrency) }
         val total = lines
