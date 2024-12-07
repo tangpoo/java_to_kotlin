@@ -2,19 +2,21 @@ package travelator.uncapsulatedcollection;
 
 
 import java.time.Duration;
+import java.util.List;
+
 public class UI {
     public void render(Iterable<Journey> route) {
         for (var journey : route) {
             render(journey);
         }
     }
-    public void render(Route route) {
+    public void render(List<Journey> route) {
         for (int i = 0; i < RouteKt.getSize(route); i++) {
             var journey = RouteKt.get(route, i);
             render(journey);
         }
     }
-    public void renderWithHeader(Route route) {
+    public void renderWithHeader(List<Journey> route) {
         renderHeader(
             RouteKt.getDepartsFrom(route),
             RouteKt.getArrivesAt(route),

@@ -2,10 +2,11 @@ package travelator.uncapsulatedcollection
 
 import java.time.Duration
 
-class Route
-    (
-    val journeys: List<Journey>
-)
+typealias Route = List<Journey>
+
+fun Route(journeys: List<Journey>) = journeys
+
+val Route.journeys get() = this
 
 val Route.size: Int
     get() = journeys.size
