@@ -1,34 +1,35 @@
-package travelator.uncapsulatedcollection;
+package travelator.uncapsulatedcollection
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration
 
-public class Route {
-    private final List<Journey> journeys; // <1>
-    public Route(List<Journey> journeys) {
-        this.journeys = journeys; // <2>
+class Route
+    (
+    private val journeys: List<Journey>
+) {
+    fun size(): Int {
+        return journeys.size
     }
-    public int size() { // <3>
-        return journeys.size();
+
+    fun get(index: Int): Journey {
+        return journeys[index]
     }
-    public Journey get(int index) { // <3>
-        return journeys.get(index);
-    }
-    public Location getDepartsFrom() { // <4>
-        return get(0).getDepartsFrom();
-    }
-    public Location getArrivesAt() { // <4>
-        return get(size() - 1).getArrivesAt();
-    }
-    public Duration getDuration() { // <4>
-        return Duration.between(
-            get(0).getDepartureTime(),
-            get(size() - 1).getArrivalTime());
-    }
-    public Route withJourneyAt(int index, Journey replacedBy) {
-        var newJourneys = new ArrayList<>(this.journeys);
-        newJourneys.set(index, replacedBy);
-        return new Route(newJourneys);
+
+    val departsFrom: Location
+        get() =
+            get(0).departsFrom
+    val arrivesAt: Location
+        get() =
+            get(size() - 1).arrivesAt
+    val duration: Duration
+        get() =
+            Duration.between(
+                get(0).departureTime,
+                get(size() - 1).arrivalTime
+            )
+
+    fun withJourneyAt(index: Int, replacedBy: Journey): Route {
+        val newJourneys = ArrayList(this.journeys)
+        newJourneys[index] = replacedBy
+        return Route(newJourneys)
     }
 }
