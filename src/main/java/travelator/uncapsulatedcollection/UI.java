@@ -11,8 +11,7 @@ public class UI {
         }
     }
     public void render(List<Journey> route) {
-        for (int i = 0; i < RouteKt.getSize(route); i++) {
-            var journey = RouteKt.get(route, i);
+        for (Journey journey : route) {
             render(journey);
         }
     }
@@ -22,8 +21,7 @@ public class UI {
             RouteKt.getArrivesAt(route),
             RouteKt.getDuration(route)
         );
-        for (int i = 0; i < RouteKt.getSize(route); i++) {
-            var journey = RouteKt.get(route, i);
+        for (Journey journey : route) {
             render(journey);
         }
     }
