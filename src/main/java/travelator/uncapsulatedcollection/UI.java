@@ -16,7 +16,7 @@ public class UI {
     }
     public void renderWithHeader(Route route) {
         renderHeader(
-            route.getDepartsFrom(),
+            RouteKt.getDepartsFrom(route),
             route.getArrivesAt(),
             route.getDuration()
         );

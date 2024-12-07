@@ -14,9 +14,6 @@ class Route
         return journeys[index]
     }
 
-    val departsFrom: Location
-        get() =
-            get(0).departsFrom
     val arrivesAt: Location
         get() =
             get(size() - 1).arrivesAt
@@ -33,3 +30,7 @@ class Route
         return Route(newJourneys)
     }
 }
+
+val Route.departsFrom: Location
+    get() =
+        get(0).departsFrom
