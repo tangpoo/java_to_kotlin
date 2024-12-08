@@ -2,7 +2,7 @@ package travelator.uncapsulatedcollection
 
 import java.time.Duration
 
-class Itinerary(
+data class Itinerary(
     val id: Id<Itinerary>,
     val route: Route
 ) : Route by route {
@@ -20,7 +20,4 @@ fun Route.hasJourneyLongerThan(duration: Duration) =
 
 
 fun Itinerary.withoutJourneysBy(travelMethod: TravelMethod) =
-    Itinerary(
-        id,
-        this.filterNot { it.method == travelMethod }
-    )
+    copy(route = filterNot { it.method == travelMethod })
