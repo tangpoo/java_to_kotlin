@@ -7,6 +7,8 @@ data class Itinerary(
     val route: Route
 ) : Route by route {
 
+    fun withTransformedRoute(transform: (Route).() -> Route) =
+        copy(route = transform(route))
 }
 
 fun Iterable<Itinerary>.shortest() =
@@ -20,4 +22,9 @@ fun Route.hasJourneyLongerThan(duration: Duration) =
 
 
 fun Itinerary.withoutJourneysBy(travelMethod: TravelMethod) =
-    copy(route = filterNot { it.method == travelMethod })
+    withTransformedRoute{
+        filterNot { it.method == travelMethod }
+    }
+
+fun Itinerary.withoutLastJourney() =
+    withTransformedRoute { dropLast(1) }
