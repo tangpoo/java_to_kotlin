@@ -21,8 +21,8 @@ public class RecommendationsTests {
     private final FeaturedDestinations featuredDestinations =
         mock(FeaturedDestinations.class);
     private final Recommendations recommendations = new Recommendations(
-        featuredDestinations,
-        distanceCalculator
+        featuredDestinations::findCloseTo,
+        distanceCalculator::distanceInMetersBetween
     );
     private final Location paris = location("Paris");
     private final FeaturedDestination louvre = featured("Louvre", "Rue de Rivoli");

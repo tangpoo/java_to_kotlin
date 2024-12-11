@@ -7,8 +7,8 @@ import travelator.interfacetofun.domain.Location
 import java.util.stream.Collectors
 
 class Recommendations(
-    private val featuredDestinations: FeaturedDestinations,
-    private val distanceCalculator: DistanceCalculator
+    private val destinationFinder: (Location) -> List<FeaturedDestination>,
+    private val distanceInMeterBetween: (Location, Location) -> Int
 ) {
     fun recommendationsFor(
         journey: Set<Location>
@@ -20,20 +20,18 @@ class Recommendations(
 
     fun recommendationsFor(
         location: Location
-    ): List<FeaturedDestinationSuggestion> {
-        return featuredDestinations
-            .findCloseTo(location)
-            .map { featuredDestination ->
-                FeaturedDestinationSuggestion(
+    ): List<FeaturedDestinationSuggestion> =
+        destinationFinder(location)
+        .map { featuredDestination ->
+            FeaturedDestinationSuggestion(
+                location,
+                featuredDestination,
+                distanceInMeterBetween(
                     location,
-                    featuredDestination,
-                    distanceCalculator.distanceInMetersBetween(
-                        location,
-                        featuredDestination.location
-                    )
+                    featuredDestination.location
                 )
-            }
-    }
+            )
+        }
 }
 
 private fun List<FeaturedDestinationSuggestion>.closestToJourneyLocation() =
