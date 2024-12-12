@@ -1,8 +1,8 @@
 package travelator.interfacetofun
 
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import travelator.interfacetofun.destinations.FeaturedDestination
 import travelator.interfacetofun.domain.Location
 import travelator.interfacetofun.recommendations.FeaturedDestinationSuggestion
@@ -32,7 +32,7 @@ class RecommendationsTests {
 
     @Test
     fun returns_no_recommendations_when_no_locations() {
-        Assertions.assertEquals(
+        assertEquals(
             emptyList<Any>(),
             recommendations.recommendationsFor(emptySet())
         )
@@ -40,8 +40,8 @@ class RecommendationsTests {
 
     @Test
     fun returns_no_recommendations_when_no_featured() {
-        givenFeaturedDestinationsFor(paris, emptyList())
-        Assertions.assertEquals(
+        givenFeaturedDestinationsFor(paris)
+        assertEquals(
             emptyList<Any>(),
             recommendations.recommendationsFor(Set.of(paris))
         )
@@ -51,14 +51,14 @@ class RecommendationsTests {
     fun returns_recommendations_for_single_location() {
         givenFeaturedDestinationsFor(
             paris,
-            java.util.List.of(
+
                 eiffelTower,
                 louvre
-            )
+
         )
         givenADistanceBetween(paris, eiffelTower, 5000)
         givenADistanceBetween(paris, louvre, 1000)
-        Assertions.assertEquals(
+        assertEquals(
             java.util.List.of(
                 FeaturedDestinationSuggestion(paris, louvre, 1000),
                 FeaturedDestinationSuggestion(paris, eiffelTower, 5000)
@@ -71,23 +71,21 @@ class RecommendationsTests {
     fun returns_recommendations_for_multi_location() {
         givenFeaturedDestinationsFor(
             paris,
-            java.util.List.of(
+
                 eiffelTower,
                 louvre
-            )
+
         )
         givenADistanceBetween(paris, eiffelTower, 5000)
         givenADistanceBetween(paris, louvre, 1000)
         givenFeaturedDestinationsFor(
             alton,
-            java.util.List.of(
-                flowerFarm,
-                watercressLine
-            )
+            flowerFarm,
+            watercressLine
         )
         givenADistanceBetween(alton, flowerFarm, 5300)
         givenADistanceBetween(alton, watercressLine, 320)
-        Assertions.assertEquals(
+        assertEquals(
             java.util.List.of(
                 FeaturedDestinationSuggestion(alton, watercressLine, 320),
                 FeaturedDestinationSuggestion(paris, louvre, 1000),
@@ -102,23 +100,21 @@ class RecommendationsTests {
     fun deduplicates_using_smallest_distance() {
         givenFeaturedDestinationsFor(
             alton,
-            java.util.List.of(
-                flowerFarm,
-                watercressLine
-            )
+            flowerFarm,
+            watercressLine
+
         )
         givenADistanceBetween(alton, flowerFarm, 5300)
         givenADistanceBetween(alton, watercressLine, 320)
         givenFeaturedDestinationsFor(
             froyle,
-            java.util.List.of(
-                flowerFarm,
-                watercressLine
-            )
+            flowerFarm,
+            watercressLine
+
         )
         givenADistanceBetween(froyle, flowerFarm, 0)
         givenADistanceBetween(froyle, watercressLine, 6300)
-        Assertions.assertEquals(
+        assertEquals(
             java.util.List.of(
                 FeaturedDestinationSuggestion(froyle, flowerFarm, 0),
                 FeaturedDestinationSuggestion(alton, watercressLine, 320)
@@ -141,7 +137,7 @@ class RecommendationsTests {
 
     private fun givenFeaturedDestinationsFor(
         location: Location,
-        destinations: List<FeaturedDestination>
+        vararg destinations: FeaturedDestination
     ) {
         featuredDestinations[location] = destinations.toList()
     }
