@@ -2,24 +2,24 @@ package travelator.interfacetofun
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import travelator.interfacetofun.destinations.FeaturedDestination
-import travelator.interfacetofun.domain.DistanceCalculator
 import travelator.interfacetofun.domain.Location
 import travelator.interfacetofun.recommendations.FeaturedDestinationSuggestion
 import travelator.interfacetofun.recommendations.Recommendations
 import java.util.Set
 
 class RecommendationsTests {
-    private val distanceCalculator = mock(DistanceCalculator::class.java)
     private val featuredDestinations =
         mutableMapOf<Location, List<FeaturedDestination>>()
             .withDefault { emptyList() }
+    private val distanceInMetersBetween =
+        mutableMapOf<Pair<Location, Location>, Int>()
+            .withDefault { -1 }
 
     private val recommendations = Recommendations(
         featuredDestinations::getValue,
-        distanceCalculator::distanceInMetersBetween
+        { l1, l2 -> distanceInMetersBetween.getValue(l1 to l2) }
     )
 
     private val paris = location("Paris")
@@ -149,9 +149,8 @@ class RecommendationsTests {
     private fun givenADistanceBetween(
         location: Location,
         destination: FeaturedDestination,
-        result: Int
+        distanceInMeters: Int
     ) {
-        `when`(distanceCalculator.distanceInMetersBetween(location, destination.location))
-            .thenReturn(result)
+        distanceInMetersBetween[location to destination.location] = distanceInMeters
     }
 }
