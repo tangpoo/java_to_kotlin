@@ -19,7 +19,7 @@ class RecommendationsTests {
 
     private val recommendations = Recommendations(
         featuredDestinations::getValue,
-        { l1, l2 -> distanceInMetersBetween.getValue(l1 to l2) }
+        distanceInMetersBetween::getValue
     )
 
     private val paris = location("Paris")
@@ -154,3 +154,6 @@ class RecommendationsTests {
         distanceInMetersBetween[location to destination.location] = distanceInMeters
     }
 }
+
+private fun <K1, K2, V> Map<Pair<K1, K2>, V>.getValue(k1: K1, k2: K2) =
+    getValue(k1 to k2)
