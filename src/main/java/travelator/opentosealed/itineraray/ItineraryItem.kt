@@ -13,8 +13,12 @@ sealed class ItineraryItem {
     abstract val costs: List<Money>
 }
 
-val ItineraryItem.mapOverlay: MapOverlay
-    get() = TODO("Not yet implemented")
+val ItineraryItem.mapOverlay: MapOverlay get() = when (this) {
+    is Accommodation -> mapOverlay
+    is Attraction -> mapOverlay
+    is Journey -> mapOverlay
+    is RestaurantBooking -> mapOverlay
+}
 
 data class Accommodation(
     override val id: Id<Accommodation>,
