@@ -13,13 +13,6 @@ sealed class ItineraryItem {
     abstract val costs: List<Money>
 }
 
-val ItineraryItem.mapOverlay: MapOverlay get() = when (this) {
-    is Accommodation -> mapOverlay
-    is Attraction -> mapOverlay
-    is Journey -> mapOverlay
-    is RestaurantBooking -> mapOverlay
-}
-
 data class Accommodation(
     override val id: Id<Accommodation>,
     val location: Location,
@@ -35,13 +28,6 @@ data class Accommodation(
     override val costs
         get() = listOf(totalPrice)
 
-    val mapOverlay
-        get() = PointOverlay(
-            id = id,
-            position = location.position,
-            text = location.userReadableName,
-            icon = StandardIcons.HOTEL
-        )
 }
 
 data class Attraction(
@@ -55,14 +41,6 @@ data class Attraction(
     override val costs
         get() =
             emptyList<Money>()
-    val mapOverlay
-        get() =
-            PointOverlay(
-                position = location.position,
-                text = description,
-                icon = StandardIcons.ATTRACTION,
-                id = id
-            )
 }
 
 data class Journey(
@@ -81,19 +59,6 @@ data class Journey(
                 "by ${travelMethod.userReadableName}"
     override val costs
         get() = listOf(price)
-    val mapOverlay
-        get() = OverlayGroup(
-            id = id,
-            elements = listOf(
-                PathOverlay(path, travelMethod.userReadableName),
-                PointOverlay(
-                    departsFrom.position,
-                    departsFrom.userReadableName,
-                    StandardIcons.START
-                ),
-                PointOverlay(arrivesAt.position, arrivesAt.userReadableName, StandardIcons.END)
-            )
-        )
 }
 
 data class RestaurantBooking(
@@ -103,12 +68,5 @@ data class RestaurantBooking(
 ) : ItineraryItem() {
     override val description get() = location.userReadableName
     override val costs get() = emptyList<Money>()
-    val mapOverlay
-        get() =
-            PointOverlay(
-                id = id,
-                position = location.position,
-                text = location.userReadableName,
-                icon = StandardIcons.RESTAURANT
-            )
 }
+
