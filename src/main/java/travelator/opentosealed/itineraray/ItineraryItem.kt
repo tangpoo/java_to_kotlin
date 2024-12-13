@@ -11,8 +11,10 @@ sealed class ItineraryItem {
     abstract val id: Id<ItineraryItem>
     abstract val description: String
     abstract val costs: List<Money>
-    abstract val mapOverlay: MapOverlay
 }
+
+val ItineraryItem.mapOverlay: MapOverlay
+    get() = TODO("Not yet implemented")
 
 data class Accommodation(
     override val id: Id<Accommodation>,
@@ -25,9 +27,11 @@ data class Accommodation(
     val totalPrice: Money = pricePerNight * nights
     override val description
         get() = "$nights nights at ${location.userReadableName}"
+
     override val costs
         get() = listOf(totalPrice)
-    override val mapOverlay
+
+    val mapOverlay
         get() = PointOverlay(
             id = id,
             position = location.position,
@@ -47,7 +51,7 @@ data class Attraction(
     override val costs
         get() =
             emptyList<Money>()
-    override val mapOverlay
+    val mapOverlay
         get() =
             PointOverlay(
                 position = location.position,
@@ -73,7 +77,7 @@ data class Journey(
                 "by ${travelMethod.userReadableName}"
     override val costs
         get() = listOf(price)
-    override val mapOverlay
+    val mapOverlay
         get() = OverlayGroup(
             id = id,
             elements = listOf(
@@ -95,7 +99,7 @@ data class RestaurantBooking(
 ) : ItineraryItem() {
     override val description get() = location.userReadableName
     override val costs get() = emptyList<Money>()
-    override val mapOverlay
+    val mapOverlay
         get() =
             PointOverlay(
                 id = id,
