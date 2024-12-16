@@ -1,8 +1,9 @@
-package travelator.error;
+package travelator.error
 
-import java.util.Optional;
+import java.util.*
 
-public interface Customers {
-    Customer add(String name, String email) throws DuplicateException;
-    Optional<Customer> find(String id);
+interface Customers {
+    @Throws(DuplicateException::class)
+    fun add(name: String?, email: String?): Customer?
+    fun find(id: String?): Optional<Customer?>?
 }
