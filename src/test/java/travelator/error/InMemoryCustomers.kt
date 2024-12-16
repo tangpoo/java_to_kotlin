@@ -1,46 +1,36 @@
-package travelator.error;
+package travelator.error
 
-import dev.forkhandles.result4k.Failure;
-import dev.forkhandles.result4k.Result;
-import dev.forkhandles.result4k.Success;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import dev.forkhandles.result4k.Failure
+import dev.forkhandles.result4k.Result
+import dev.forkhandles.result4k.Success
+import travelator.error.util.toOptional
+import java.util.*
 
-public class InMemoryCustomers implements Customers {
+class InMemoryCustomers : Customers {
+    private val list: MutableList<Customer> = ArrayList()
+    private var id = 0
 
-    private final List<Customer> list = new ArrayList<>();
-    private int id = 0;
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Result<Customer, DuplicateException> add(String name, String email) {
-        if (list.stream().anyMatch(item -> item.getEmail().equals(email))) {
-            return new Failure<>(
-                new DuplicateException(
-                    "customer with email " + email + " already exists"
+    override fun add(name: String, email: String): Result<Customer, DuplicateException> =
+        when {
+            list.any { it.email == email } -> Failure(
+                    DuplicateException(
+                        "customer with email $email already exists"
+                    )
                 )
-            );
+            else -> {
+                val result = Customer(id++.toString(), name, email)
+                list.add(result)
+                Success(result)
+            }
         }
-        int newId = id++;
-        Customer result = new Customer(Integer.toString(newId), name, email);
-        list.add(result);
-        return new Success<Customer>(result);
-    }
 
-    @Override
-    public Optional<Customer> find(String id) {
-        return list.stream()
-            .filter(customer -> customer.getId().equals(id))
-            .findFirst();
-    }
+    override fun find(id: String): Optional<Customer> =
+        list.firstOrNull { it.id == id }.toOptional()
 
     // for test
-    public void add(Customer customer) {
-        list.add(customer);
+    fun add(customer: Customer) {
+        list.add(customer)
     }
 
-    public int size() {
-        return list.size();
-    }
+    fun size(): Int = list.size
 }
