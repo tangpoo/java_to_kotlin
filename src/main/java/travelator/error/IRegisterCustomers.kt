@@ -1,8 +1,8 @@
-package travelator.error;
+package travelator.error
 
-import travelator.error.handlers.RegistrationData;
+import travelator.error.handlers.RegistrationData
 
-public interface IRegisterCustomers {
-    Customer register(RegistrationData data)
-        throws ExcludedException, DuplicateException;
+interface IRegisterCustomers {
+    @Throws(ExcludedException::class, DuplicateException::class)
+    fun register(data: RegistrationData): Customer
 }
