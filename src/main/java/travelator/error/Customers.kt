@@ -4,6 +4,6 @@ import java.util.*
 
 interface Customers {
     @Throws(DuplicateException::class)
-    fun add(name: String?, email: String?): Customer?
-    fun find(id: String?): Optional<Customer?>?
+    fun add(name: String, email: String): Customer
+    fun find(id: String): Optional<Customer>
 }
