@@ -1,5 +1,8 @@
 package travelator.error;
 
+import dev.forkhandles.result4k.Failure;
+import dev.forkhandles.result4k.Result;
+import dev.forkhandles.result4k.Success;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +10,7 @@ import java.util.Optional;
 public class InMemoryCustomers implements Customers {
     private final List<Customer> list = new ArrayList<>();
     private int id = 0;
+
     @Override
     public Customer add(String name, String email) throws DuplicateException {
         if (list.stream().anyMatch( item -> item.getEmail().equals(email)))
@@ -18,6 +22,22 @@ public class InMemoryCustomers implements Customers {
         list.add(result);
         return result;
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Result<Customer, DuplicateException> addToo(String name, String email) {
+        if (list.stream().anyMatch( item -> item.getEmail().equals(email)))
+            return new Failure<>(
+                new DuplicateException(
+                    "customer with email " + email + " already exists"
+                )
+            );
+        int newId = id++;
+        Customer result = new Customer(Integer.toString(newId), name, email);
+        list.add(result);
+        return new Success<Customer>(result);
+    }
+
     @Override
     public Optional<Customer> find(String id) {
         return list.stream()
