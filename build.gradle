@@ -15,6 +15,10 @@ repositories {
 }
 
 dependencies {
+
+    implementation(platform("dev.forkhandles:forkhandles-bom:2.4.0.0"))
+    implementation("dev.forkhandles:result4k")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "com.fasterxml.jackson.core:jackson-databind:2.15.2" // 최신 Jackson 버전으로 변경
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2"
