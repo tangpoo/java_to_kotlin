@@ -8,11 +8,11 @@ class CustomerRegistration(
     private val exclusionList: ExclusionList
 ) : IRegisterCustomers {
     override fun register(data: RegistrationData): Result<Customer, RegistrationProblem> =
-        when {
+         when {
             exclusionList.exclude(data) -> Failure(Excluded)
             else -> customers.add(data.name, data.email)
-                .mapFailure { exception: DuplicateException ->
-                    Duplicate(exception.message)
+                .mapFailure { duplicate: DuplicateCustomerProblem ->
+                    Duplicate(duplicate.message)
                 }
         }
 }

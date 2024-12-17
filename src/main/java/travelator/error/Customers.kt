@@ -6,7 +6,7 @@ import dev.forkhandles.result4k.Success
 import java.util.*
 
 interface Customers {
-    fun add(name: String, email: String):Result<Customer, CustomerProblem>
+    fun add(name: String, email: String):Result<Customer, DuplicateCustomerProblem>
     fun find(id: String): Optional<Customer>
 }
 
