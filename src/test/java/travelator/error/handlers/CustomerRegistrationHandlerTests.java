@@ -5,9 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import dev.forkhandles.result4k.Failure;
+import dev.forkhandles.result4k.Success;
 import org.junit.jupiter.api.Test;
 import travelator.error.Customer;
+import travelator.error.Duplicate;
 import travelator.error.DuplicateException;
+import travelator.error.Excluded;
 import travelator.error.ExcludedException;
 import travelator.error.IRegisterCustomers;
 import travelator.error.http.Request;
@@ -24,12 +28,11 @@ public class CustomerRegistrationHandlerTests {
     final RegistrationData fredData =
         new RegistrationData("fred", "fred@bedrock.com");
     @Test
-    public void returns_Created_with_body_on_success()
-        throws DuplicateException, ExcludedException {
-        when(registration.register(fredData))
-            .thenReturn(
+    public void returns_Created_with_body_on_success() {
+        when(registration.registerToo(fredData))
+            .thenReturn(new Success<>(
                 new Customer("0", fredData.name, fredData.email)
-            );
+                ));
         String expectedBody = toJson(
             "{'id':'0','name':'fred','email':'fred@bedrock.com'}"
         );
@@ -39,24 +42,22 @@ public class CustomerRegistrationHandlerTests {
         );
     }
     @Test
-    public void returns_Conflict_for_duplicate()
-        throws DuplicateException, ExcludedException {
-        when(registration.register(fredData))
-            .thenThrow(
-                new DuplicateException("deliberate")
-            );
+    public void returns_Conflict_for_duplicate() {
+        when(registration.registerToo(fredData))
+            .thenReturn(new Failure<>(
+                new Duplicate("deliberate")
+            ));
         assertEquals(
             new Response(HTTP_CONFLICT),
             handler.handle(new Request(fredBody))
         );
     }
     @Test
-    public void returns_Forbidden_for_excluded()
-        throws DuplicateException, ExcludedException {
-        when(registration.register(fredData))
-            .thenThrow(
-                new ExcludedException()
-            );
+    public void returns_Forbidden_for_excluded() {
+        when(registration.registerToo(fredData))
+            .thenReturn(new Failure<>(
+                Excluded.INSTANCE
+            ));
         assertEquals(
             new Response(HTTP_FORBIDDEN),
             handler.handle(new Request(fredBody))
