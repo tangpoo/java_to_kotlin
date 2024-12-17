@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import dev.forkhandles.result4k.Failure
 import dev.forkhandles.result4k.Success
+import dev.forkhandles.result4k.map
+import dev.forkhandles.result4k.recover
 import travelator.error.*
 import travelator.error.http.Request
 import travelator.error.http.Response
@@ -12,25 +14,23 @@ import java.net.HttpURLConnection.*
 
 class CustomerRegistrationHandler(private val registration: IRegisterCustomers) {
     private val objectMapper = ObjectMapper()
-    fun handle(request: Request): Response {
-        return try {
-            val data = objectMapper.readValue(
-                request.body,
-                RegistrationData::class.java
-            )
-            val customerResult = registration.registerToo(data)
-            when (customerResult) {
-                is Success -> Response(
+    fun handle(request: Request): Response = try {
+        val data = objectMapper.readValue(
+            request.body,
+            RegistrationData::class.java
+        )
+        registration.registerToo(data)
+            .map { value ->
+                Response(
                     HTTP_CREATED,
-                    objectMapper.writeValueAsString(customerResult.value)
+                    objectMapper.writeValueAsString(value)
                 )
-                is Failure -> customerResult.reason.toResponse()
             }
-        } catch (x: JsonProcessingException) {
-            Response(HTTP_BAD_REQUEST)
-        } catch (x: Exception) {
-            Response(HTTP_INTERNAL_ERROR)
-        }
+            .recover { reason -> reason.toResponse() }
+    } catch (x: JsonProcessingException) {
+        Response(HTTP_BAD_REQUEST)
+    } catch (x: Exception) {
+        Response(HTTP_INTERNAL_ERROR)
     }
 }
 
