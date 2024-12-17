@@ -2,14 +2,11 @@ package travelator.error.handlers
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import dev.forkhandles.result4k.Failure
-import dev.forkhandles.result4k.Success
 import dev.forkhandles.result4k.map
 import dev.forkhandles.result4k.recover
 import travelator.error.*
 import travelator.error.http.Request
 import travelator.error.http.Response
-import java.net.HttpURLConnection
 import java.net.HttpURLConnection.*
 
 class CustomerRegistrationHandler(private val registration: IRegisterCustomers) {
@@ -19,7 +16,7 @@ class CustomerRegistrationHandler(private val registration: IRegisterCustomers) 
             request.body,
             RegistrationData::class.java
         )
-        registration.registerToo(data)
+        registration.register(data)
             .map { value ->
                 Response(
                     HTTP_CREATED,

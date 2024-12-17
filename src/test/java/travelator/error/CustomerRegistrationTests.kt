@@ -3,9 +3,7 @@ package travelator.error
 import dev.forkhandles.result4k.failureOrNull
 import dev.forkhandles.result4k.valueOrNull
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
 import travelator.error.handlers.RegistrationData
 import java.util.*
 
@@ -21,7 +19,7 @@ class CustomerRegistrationTests {
     @Test
     fun `adds a customer when not excluded`() {
         assertEquals(Optional.empty<Any>(), customers.find("0"))
-        val added = registration.registerToo(
+        val added = registration.register(
             RegistrationData("fred flintstone", "fred@bedrock.com")
         ).valueOrNull()
         assertEquals(
@@ -35,7 +33,7 @@ class CustomerRegistrationTests {
     fun `return duplicate when email address exists`() {
         customers.add(Customer("0", "fred flintstone", "fred@bedrock.com"))
         assertEquals(1, customers.size())
-        val failure = registration.registerToo(
+        val failure = registration.register(
             RegistrationData("another name", "fred@bedrock.com")
         ).failureOrNull()
         assertEquals(
@@ -48,7 +46,7 @@ class CustomerRegistrationTests {
 
     @Test
     fun `returns Excluded when excluded`() {
-        val failure = registration.registerToo(
+        val failure = registration.register(
             RegistrationData("cruella de vil", "cruella@hellhall.co.uk")
         ).failureOrNull()
 
