@@ -1,57 +1,62 @@
-package travelator.marketing;
+package travelator.marketing
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.List;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.io.StringReader
+import java.io.StringWriter
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-class HighValueCustomersReportTests {
+internal class HighValueCustomersReportTests {
     @Test
-    public void test() throws IOException {
-        List<String> input = List.of(
+    @Throws(IOException::class)
+    fun test() {
+        val input = listOf(
             "ID\tFirstName\tLastName\tScore\tSpend",
             "1\tFred\tFlintstone\t11\t1000.00",
             "4\tBetty\tRubble\t10\t2000.00",
             "2\tBarney\tRubble\t0\t20.00",
             "3\tWilma\tFlintstone\t9\t0.00"
-        );
-        List<String> expected = List.of(
+        )
+        val expected = listOf(
             "ID\tName\tSpend",
             "4\tRUBBLE, Betty\t2000.00",
             "1\tFLINTSTONE, Fred\t1000.00",
             "\tTOTAL\t3000.00"
-        );
-        check(input, expected);
+        )
+        check(input, expected)
     }
+
     @Test
-    public void emptyTest() throws IOException {
-        List<String> input = List.of(
+    @Throws(IOException::class)
+    fun emptyTest() {
+        val input = listOf(
             "ID\tFirstName\tLastName\tScore\tSpend"
-        );
-        List<String> expected = List.of(
+        )
+        val expected = listOf(
             "ID\tName\tSpend",
             "\tTOTAL\t0.00"
-        );
-        check(input, expected);
+        )
+        check(input, expected)
     }
+
     @Test
-    public void emptySpendIs0() {
-        assertEquals(
-            new CustomerData("1", "Fred", "Flintstone", 0, 0D),
-            HighValueCustomersReportKt.toCustomerData("1\tFred\tFlintstone\t0")
-        );
+    fun emptySpendIs0() {
+        Assertions.assertEquals(
+            CustomerData("1", "Fred", "Flintstone", 0, 0.0),
+            "1\tFred\tFlintstone\t0".toCustomerData()
+        )
     }
-    private void check(
-        List<String> inputLines,
-        List<String> expectedLines
-    ) throws IOException {
-        var output = new StringWriter();
-        HighValueCustomersReportKt.generate(
-            new StringReader(String.join("\n", inputLines)),
+
+    @Throws(IOException::class)
+    private fun check(
+        inputLines: List<String>,
+        expectedLines: List<String>
+    ) {
+        val output = StringWriter()
+        generate(
+            StringReader(java.lang.String.join("\n", inputLines)),
             output
-        );
-        assertEquals(String.join("\n", expectedLines), output.toString());
+        )
+        Assertions.assertEquals(java.lang.String.join("\n", expectedLines), output.toString())
     }
 }
