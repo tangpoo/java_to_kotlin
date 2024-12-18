@@ -6,6 +6,7 @@ import java.util.*
 fun generate(lines: List<String>): Sequence<String> {
     val valuableCustomers = lines
         .asSequence()
+        .constrainOnce()
         .withoutHeader()
         .map(String::toCustomerData)
         .filter { it.score >= 10 }
