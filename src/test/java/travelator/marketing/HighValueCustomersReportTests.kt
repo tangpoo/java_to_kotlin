@@ -48,11 +48,13 @@ internal class HighValueCustomersReportTests {
         )
     }
 
-    @Throws(IOException::class)
     private fun check(
         inputLines: List<String>,
         expectedLines: List<String>
     ) {
-        assertEquals(expectedLines, generate(inputLines))
+        assertEquals(
+            expectedLines,
+            generate(inputLines).toList()
+        )
     }
 }
