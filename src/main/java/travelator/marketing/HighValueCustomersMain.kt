@@ -9,6 +9,8 @@ fun main() {
             writer.appendLines(
                 generate(
                     reader.readLines()
+                        .asSequence()
+                        .constrainOnce()
                 )
             )
         }

@@ -3,8 +3,6 @@ package travelator.marketing
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
-import java.io.StringReader
-import java.io.StringWriter
 import java.lang.String.*
 
 internal class HighValueCustomersReportTests {
@@ -54,7 +52,11 @@ internal class HighValueCustomersReportTests {
     ) {
         assertEquals(
             expectedLines,
-            generate(inputLines).toList()
+            generate(
+                inputLines
+                    .asSequence()
+                    .constrainOnce()
+            ).toList()
         )
     }
 }
