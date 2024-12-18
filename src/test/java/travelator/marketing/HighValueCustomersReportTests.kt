@@ -53,10 +53,6 @@ internal class HighValueCustomersReportTests {
         inputLines: List<String>,
         expectedLines: List<String>
     ) {
-        val output = StringWriter()
-        output.append(generate(inputLines).joinToString("\n"))
-        val outputLines = output.toString().lines()
-
-        assertEquals(expectedLines, outputLines)
+        assertEquals(expectedLines, generate(inputLines))
     }
 }
