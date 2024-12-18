@@ -11,6 +11,7 @@ fun generate(lines: List<String>): Sequence<String> {
         .map(String::toCustomerData)
         .filter { it.score >= 10 }
         .sortedBy(CustomerData::score)
+        .toList()
     return sequenceOf("ID\tName\tSpend") +
             valuableCustomers.map(CustomerData::outputLine) +
             valuableCustomers.summarised()
@@ -18,7 +19,7 @@ fun generate(lines: List<String>): Sequence<String> {
 
 private fun Sequence<String>.withoutHeader() = drop(1)
 
-private fun Sequence<CustomerData>.summarised(): String =
+private fun List<CustomerData>.summarised(): String =
     sumOf { it.spend }.let { total ->
         "\tTOTAL\t" + total.toMoneyString()
     }
