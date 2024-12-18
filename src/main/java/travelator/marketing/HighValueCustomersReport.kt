@@ -3,9 +3,8 @@ package travelator.marketing
 import java.util.*
 
 
-fun generate(lines: Sequence<String>): Sequence<String> {
-    val valuableCustomers = lines
-        .withoutHeader()
+fun Sequence<String>.toHighValueCustomerReport(): Sequence<String> {
+    val valuableCustomers = withoutHeader()
         .map(String::toCustomerData)
         .filter { it.score >= 10 }
         .sortedBy(CustomerData::score)
