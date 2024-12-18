@@ -11,7 +11,7 @@ fun generate(reader: Reader, writer: Writer) {
     val valuableCustomers = reader.readLines()
         .toValuableCustomers()
         .sortedBy(CustomerData::score)
-    writer.appendLine("ID\tName\tSpend\n")
+    writer.appendLine("ID\tName\tSpend")
     for (customerData in valuableCustomers) {
         writer.appendLine(customerData.outputLine)
     }

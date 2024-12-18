@@ -1,10 +1,12 @@
 package travelator.marketing
 
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
 import java.io.StringReader
 import java.io.StringWriter
+import java.lang.String.*
 
 internal class HighValueCustomersReportTests {
     @Test
@@ -41,7 +43,7 @@ internal class HighValueCustomersReportTests {
 
     @Test
     fun emptySpendIs0() {
-        Assertions.assertEquals(
+        assertEquals(
             CustomerData("1", "Fred", "Flintstone", 0, 0.0),
             "1\tFred\tFlintstone\t0".toCustomerData()
         )
@@ -53,10 +55,10 @@ internal class HighValueCustomersReportTests {
         expectedLines: List<String>
     ) {
         val output = StringWriter()
-        generate(
-            StringReader(java.lang.String.join("\n", inputLines)),
-            output
-        )
-        Assertions.assertEquals(java.lang.String.join("\n", expectedLines), output.toString())
+        val reader = StringReader(inputLines.joinToString("\n"))
+        generate(reader, output)
+        val outputLines = output.toString().lines()
+
+        assertEquals(expectedLines, outputLines)
     }
 }
