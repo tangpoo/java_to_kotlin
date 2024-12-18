@@ -5,6 +5,8 @@ import java.util.*
 
 fun generate(lines: List<String>): Sequence<String> {
     val valuableCustomers = lines
+        .asSequence()
+        .withoutHeader()
         .map(String::toCustomerData)
         .filter { it.score >= 10 }
         .sortedBy(CustomerData::score)
@@ -13,9 +15,9 @@ fun generate(lines: List<String>): Sequence<String> {
             valuableCustomers.summarised()
 }
 
-private fun List<String>.withoutHeader() = drop(1)
+private fun Sequence<String>.withoutHeader() = drop(1)
 
-private fun List<CustomerData>.summarised(): String =
+private fun Sequence<CustomerData>.summarised(): String =
     sumOf { it.spend }.let { total ->
         "\tTOTAL\t" + total.toMoneyString()
     }
