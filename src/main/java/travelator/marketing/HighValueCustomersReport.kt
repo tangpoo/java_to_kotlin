@@ -3,17 +3,21 @@ package travelator.marketing
 import java.io.IOException
 import java.io.Writer
 import java.util.*
+import kotlin.contracts.Returns
 
 
 @Throws(IOException::class)
 fun generate(writer: Writer, lines: List<String>) {
+    writer.append(generate(lines).joinToString("\n"))
+}
+
+private fun generate(lines: List<String>): List<String> {
     val valuableCustomers = lines
         .toValuableCustomers()
         .sortedBy(CustomerData::score)
-    val resultLines = listOf("ID\tName\tSpend") +
+    return listOf("ID\tName\tSpend") +
             valuableCustomers.map(CustomerData::outputLine) +
             valuableCustomers.summarised()
-    writer.append(resultLines.joinToString("\n"))
 }
 
 private fun List<String>.toValuableCustomers() = withoutHeader()
