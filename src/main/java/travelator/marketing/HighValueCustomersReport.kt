@@ -21,15 +21,18 @@ private fun List<CustomerData>.summarised(): String =
         "\tTOTAL\t" + total.toMoneyString()
     }
 
-fun String.toCustomerData(): CustomerData =
+fun String.toCustomerData(): CustomerData? =
     split("\t").let { parts ->
-        CustomerData(
-            id = parts[0],
-            givenName = parts[1],
-            familyName = parts[2],
-            score = parts[3].toInt(),
-            spend = if (parts.size == 4) 0.0 else parts[4].toDouble()
-        )
+        if (parts.size < 4)
+            null
+        else
+            CustomerData(
+                id = parts[0],
+                givenName = parts[1],
+                familyName = parts[2],
+                score = parts[3].toInt(),
+                spend = if (parts.size == 4) 0.0 else parts[4].toDouble()
+            )
     }
 
 private val CustomerData.outputLine: String
