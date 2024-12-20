@@ -65,7 +65,7 @@ internal class HighValueCustomersReportTests {
             .toList()
 
         assertEquals(
-            listOf(NotEnoughFieldsFailure("INVALID LINE")),
+            listOf(NotEnoughFieldFailure("INVALID LINE")),
             errorCollector
         )
 
