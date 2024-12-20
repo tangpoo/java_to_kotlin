@@ -6,6 +6,7 @@ import java.util.*
 fun Sequence<String>.toHighValueCustomerReport(): Sequence<String> {
     val valuableCustomers = withoutHeader()
         .map(String::toCustomerData)
+        .filterNotNull()
         .filter { it.score >= 10 }
         .sortedBy(CustomerData::score)
         .toList()
