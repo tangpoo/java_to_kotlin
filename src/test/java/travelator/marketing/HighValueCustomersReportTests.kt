@@ -1,5 +1,6 @@
 package travelator.marketing
 
+import dev.forkhandles.result4k.Success
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -41,7 +42,7 @@ internal class HighValueCustomersReportTests {
     @Test
     fun emptySpendIs0() {
         assertEquals(
-            CustomerData("1", "Fred", "Flintstone", 0, 0.0),
+            Success(CustomerData("1", "Fred", "Flintstone", 0, 0.0)),
             "1\tFred\tFlintstone\t0".toCustomerData()
         )
     }
@@ -54,14 +55,19 @@ internal class HighValueCustomersReportTests {
             "1\tFred\tFlintstone\t11\t1000.00",
         )
 
-        val errorCollector = mutableListOf<String>()
+        val errorCollector = mutableListOf<ParseFailure>()
         val result = lines
             .asSequence()
             .constrainOnce()
-            .toHighValueCustomerReport { badLine -> // <1>
+            .toHighValueCustomerReport { badLine ->
                 errorCollector += badLine
             }
             .toList()
+
+        assertEquals(
+            listOf(NotEnoughFieldFailure("INVALID LINE")),
+            errorCollector
+        )
 
         assertEquals(
             listOf(
@@ -70,10 +76,6 @@ internal class HighValueCustomersReportTests {
                 "\tTOTAL\t1000.00"
             ),
             result
-        )
-        assertEquals(
-            listOf("INVALID LINE"),
-            errorCollector
         )
     }
 
