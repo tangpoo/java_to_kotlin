@@ -1,9 +1,6 @@
 package travelator.marketing
 
-import dev.forkhandles.result4k.Failure
-import dev.forkhandles.result4k.Result
-import dev.forkhandles.result4k.Success
-import dev.forkhandles.result4k.recover
+import dev.forkhandles.result4k.*
 import java.util.*
 
 
@@ -36,19 +33,29 @@ private fun List<CustomerData>.summarised(): String =
 
 fun String.toCustomerData(): Result<CustomerData, ParseFailure> =
     split("\t").let { parts ->
-        if (parts.size < 4)
-            return Failure(NotEnoughFieldFailure(this))
-        val score = parts[3].toIntOrNull() ?: return Failure(ScoreIsNotAnIntFailure(this))
-        val spend = if (parts.size == 4) 0.0 else parts[4].toDoubleOrNull() ?: return Failure(SpendIsNotADoubleFailure(this))
-        Success(
-            CustomerData(
-                id = parts[0],
-                givenName = parts[1],
-                familyName = parts[2],
-                score = score,
-                spend = spend
-            )
-        )
+        parts
+            .takeUnless { it.size < 4 }
+            .asResultOr { NotEnoughFieldsFailure(this) }
+            .flatMap { parts ->
+                parts[3].toIntOrNull()
+                    .asResultOr { ScoreIsNotAnIntFailure(this) }
+                    .flatMap { score: Int ->
+                        (if (parts.size == 4) 0.0
+                        else parts[4].toDoubleOrNull())
+                            .asResultOr { SpendIsNotADoubleFailure(this) }
+                            .flatMap { spend ->
+                                Success(
+                                    CustomerData(
+                                        id = parts[0],
+                                        givenName = parts[1],
+                                        familyName = parts[2],
+                                        score = score,
+                                        spend = spend
+                                    )
+                                )
+                            }
+                    }
+            }
     }
 
 private val CustomerData.outputLine: String
@@ -62,7 +69,7 @@ private val CustomerData.marketingName: String
     get() = "${familyName.uppercase(Locale.getDefault())}, $givenName"
 
 sealed class ParseFailure(open val line: String)
-data class NotEnoughFieldFailure(override val line: String) :
+data class NotEnoughFieldsFailure(override val line: String) :
         ParseFailure(line)
 data class ScoreIsNotAnIntFailure(override val line: String) :
         ParseFailure(line)
