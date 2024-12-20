@@ -1,6 +1,7 @@
 package travelator.marketing
 
 import java.io.Closeable
+import java.io.IOException
 import java.io.OutputStreamWriter
 import java.io.Reader
 import java.io.Writer
@@ -8,24 +9,29 @@ import kotlin.system.exitProcess
 
 
 fun main() {
-    val statusCode = using(
-        System.`in`.reader(),
-        System.out.writer(),
-        System.err.writer()
-    ) { reader, writer, error ->
-        val errorLines = mutableListOf<ParseFailure>()
-        val reportLines = reader
-            .asLineSequence()
-            .toHighValueCustomerReport {
-                errorLines += it
+    val statusCode = try {
+        using(
+            System.`in`.reader(),
+            System.out.writer(),
+            System.err.writer()
+        ) { reader, writer, error ->
+            val errorLines = mutableListOf<ParseFailure>()
+            val reportLines = reader
+                .asLineSequence()
+                .toHighValueCustomerReport {
+                    errorLines += it
+                }
+            if (errorLines.isEmpty()) {
+                reportLines.writeTo(writer)
+                0
+            } else {
+                reportLines.writeTo(error)
+                -1
             }
-        if (errorLines.isEmpty()) {
-            reportLines.writeTo(writer)
-            0
-        } else {
-            reportLines.writeTo(error)
-            -1
         }
+    } catch (x: IOException) {
+        System.err.println("IO error processing report ${x.message}")
+        -1
     }
     exitProcess(statusCode)
 }
