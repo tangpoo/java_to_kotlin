@@ -8,7 +8,8 @@ fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
 }
 
 fun headerProviderFrom(header: String): (Int) -> String {
-    TODO("Not yet implemented")
+    val headers = header.splitFields(",")
+    return { index -> headers[index] }
 }
 
 
@@ -20,10 +21,10 @@ private fun parseLine(
     line: String,
     headerProvider: (Int) -> String
 ): Map<String, String> {
-    val values = splitFields(line)
+    val values = line.splitFields(",")
     val keys = values.indices.map(headerProvider)
     return keys.zip(values).toMap()
 }
 
-private fun splitFields(line: String): List<String> =
-    if (line.isEmpty()) emptyList() else line.split(",")
+private fun String.splitFields(separator: String): List<String> =
+    if (isEmpty()) emptyList() else split(separator)

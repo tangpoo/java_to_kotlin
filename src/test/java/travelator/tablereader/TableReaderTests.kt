@@ -51,7 +51,6 @@ class TableReaderTests {
         )
     }
 
-    @Disabled
     @Test
     fun `takes headers from header line`() {
         assertEquals(
