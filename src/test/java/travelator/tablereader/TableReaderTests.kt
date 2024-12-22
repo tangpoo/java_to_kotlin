@@ -11,4 +11,16 @@ class TableReaderTests {
             readTable(emptyList<String>())
         )
     }
+
+    @Test
+    fun `one line of input with default field names`() {
+        assertEquals(
+            listOf(
+                mapOf("0" to "field0", "1" to "field1")
+            ),
+            readTable(listOf(
+                "field0,field1"
+            ))
+        )
+    }
 }
