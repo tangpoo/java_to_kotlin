@@ -49,4 +49,20 @@ class TableReaderTests {
                 ))
         )
     }
+
+    @Test
+    fun `takes headers from header line`() {
+        assertEquals(
+            listOf(
+                mapOf("H0" to "field0", "H1" to "field1")
+            ),
+            readTableWithHeader(
+                listOf(
+                    "H0,H1",
+                    "field0,field1"
+                )
+            )
+        )
+    }
 }
+
