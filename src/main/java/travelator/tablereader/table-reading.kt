@@ -4,8 +4,8 @@ fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
     return readTable(lines)
 }
 
-fun readTable(lines: List<String>): List<Map<String, String>> {
-    return lines.map { parseLine(it, Int::toString) }
+fun readTable(lines: List<String>, headerProvider: (Int) -> String = Int::toString): List<Map<String, String>> {
+    return lines.map { parseLine(it, headerProvider) }
 }
 
 private fun parseLine(
