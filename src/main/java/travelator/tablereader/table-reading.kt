@@ -1,10 +1,13 @@
 package travelator.tablereader
 
 fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
-    return readTable(
-        lines.drop(1),
-        headerProviderFrom(lines.first())
-    )
+    return when {
+        lines.isEmpty() -> emptyList()
+        else -> readTable(
+            lines.drop(1),
+            headerProviderFrom(lines.first())
+        )
+    }
 }
 
 fun headerProviderFrom(header: String): (Int) -> String {
@@ -13,7 +16,10 @@ fun headerProviderFrom(header: String): (Int) -> String {
 }
 
 
-fun readTable(lines: List<String>, headerProvider: (Int) -> String = Int::toString): List<Map<String, String>> {
+fun readTable(
+    lines: List<String>,
+    headerProvider: (Int) -> String = Int::toString
+): List<Map<String, String>> {
     return lines.map { parseLine(it, headerProvider) }
 }
 
