@@ -1,11 +1,14 @@
 package travelator.tablereader
 
-fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
+fun readTableWithHeader(
+    lines: List<String>,
+    splitter: (String) -> List<String> = splitOnComma
+): List<Map<String, String>> {
     return when {
         lines.isEmpty() -> emptyList()
         else -> readTable(
             lines.drop(1),
-            headerProviderFrom(lines.first(), splitOnComma)
+            headerProviderFrom(lines.first(), splitter)
         )
     }
 }
