@@ -22,9 +22,6 @@ fun headerProviderFrom(
     return { index -> headers[index] }
 }
 
-
-
-
 fun readTable(
     lines: Sequence<String>,
     headerProvider: (Int) -> String = Int::toString,
@@ -51,5 +48,7 @@ private fun parseLine(
     return keys.zip(values).toMap()
 }
 
+// 빈 문자열에 대해 String.split을 호출하면 빈 리스트가 아니라
+// 빈 문자열의 리스트를 반환하기 때문에 빈 문자열을 별도로 처리할 필요가 있다.
 private fun String.splitFields(separator: String): List<String> =
     if (isEmpty()) emptyList() else split(separator)
