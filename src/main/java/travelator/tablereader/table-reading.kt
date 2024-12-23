@@ -33,8 +33,13 @@ fun readTable(
     }
 }
 
-val splitOnComma: (String) -> List<String> = { line ->
-    line.splitFields(",") }
+fun splitOn(separators: String) = { line: String ->
+    line.splitFields(separators)
+}
+
+val splitOnComma: (String) -> List<String> = splitOn(",")
+
+val splitOnTab: (String) -> List<String> = splitOn("\t")
 
 private fun parseLine(
     line: String,
