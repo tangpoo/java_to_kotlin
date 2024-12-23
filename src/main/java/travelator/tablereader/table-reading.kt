@@ -18,10 +18,11 @@ fun headerProviderFrom(header: String): (Int) -> String {
 
 fun readTable(
     lines: List<String>,
-    headerProvider: (Int) -> String = Int::toString
+    headerProvider: (Int) -> String = Int::toString,
+    splitter: (String) -> List<String> = splitOnComma
 ): List<Map<String, String>> {
     return lines.map {
-        parseLine(it, headerProvider, splitOnComma)
+        parseLine(it, headerProvider, splitter)
     }
 }
 
