@@ -27,13 +27,19 @@ fun readTable(
     lines: List<String>,
     headerProvider: (Int) -> String = Int::toString,
     splitter: (String) -> List<String> = splitOnComma
-): List<Map<String, String>> {
-    return lines
-        .asSequence()
-        .map {
-            parseLine(it, headerProvider, splitter)
-        }
-        .toList()
+): List<Map<String, String>> =
+    readTable(
+        lines.asSequence(),
+        headerProvider,
+        splitter
+    ).toList()
+
+fun readTable(
+    lines: Sequence<String>,
+    headerProvider: (Int) -> String = Int::toString,
+    splitter: (String) -> List<String> = splitOnComma
+) = lines.map {
+    parseLine(it, headerProvider, splitter)
 }
 
 fun splitOn(separators: String) = { line: String ->
