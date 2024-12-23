@@ -118,3 +118,24 @@ class TableReaderTests {
     }
 }
 
+fun readTableWithHeader(
+    lines: List<String>,
+    splitter: (String) -> List<String> = splitOnComma
+): List<Map<String, String>> =
+    readTableWithHeader(
+        lines.asSequence(),
+        lines,
+        splitter
+    )
+
+
+fun readTable(
+    lines: List<String>,
+    headerProvider: (Int) -> String = Int::toString,
+    splitter: (String) -> List<String> = splitOnComma
+): List<Map<String, String>> =
+    readTable(
+        lines.asSequence(),
+        headerProvider,
+        splitter
+    ).toList()

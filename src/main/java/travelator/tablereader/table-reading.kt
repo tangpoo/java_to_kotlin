@@ -1,16 +1,6 @@
 package travelator.tablereader
 
 fun readTableWithHeader(
-    lines: List<String>,
-    splitter: (String) -> List<String> = splitOnComma
-): List<Map<String, String>> =
-    readTableWithHeader(
-        lines.asSequence(),
-        lines,
-        splitter
-    )
-
-fun readTableWithHeader(
     linesAsSequence: Sequence<String>,
     lines: List<String>,
     splitter: (String) -> List<String>
@@ -33,16 +23,7 @@ fun headerProviderFrom(
 }
 
 
-fun readTable(
-    lines: List<String>,
-    headerProvider: (Int) -> String = Int::toString,
-    splitter: (String) -> List<String> = splitOnComma
-): List<Map<String, String>> =
-    readTable(
-        lines.asSequence(),
-        headerProvider,
-        splitter
-    ).toList()
+
 
 fun readTable(
     lines: Sequence<String>,
