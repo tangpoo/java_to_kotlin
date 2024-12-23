@@ -4,13 +4,15 @@ fun readTableWithHeader(
     lines: List<String>,
     splitter: (String) -> List<String> = splitOnComma
 ): List<Map<String, String>> {
+    val linesAsSequence = lines.asSequence()
     return when {
-        lines.isEmpty() -> emptyList()
-        else -> readTable(
-            lines.drop(1).asSequence(),
-            headerProviderFrom(lines.first(), splitter),
-            splitter
-        ).toList()
+        linesAsSequence.isEmpty() -> emptySequence()
+        else ->
+            readTable(
+                linesAsSequence.drop(1),
+                headerProviderFrom(lines.first(), splitter),
+                splitter
+            ).toList()
     }
 }
 
