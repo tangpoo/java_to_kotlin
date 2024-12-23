@@ -5,13 +5,16 @@ fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
         lines.isEmpty() -> emptyList()
         else -> readTable(
             lines.drop(1),
-            headerProviderFrom(lines.first())
+            headerProviderFrom(lines.first()) { header -> header.splitFields(",") }
         )
     }
 }
 
-fun headerProviderFrom(header: String): (Int) -> String {
-    val headers = header.splitFields(",")
+fun headerProviderFrom(
+    header: String,
+    splitter: (String) -> List<String>
+): (Int) -> String {
+    val headers = splitter(header)
     return { index -> headers[index] }
 }
 
