@@ -20,8 +20,11 @@ fun readTable(
     lines: List<String>,
     headerProvider: (Int) -> String = Int::toString
 ): List<Map<String, String>> {
-    return lines.map { parseLine(it, headerProvider) { line ->
-        line.splitFields(",") }
+    return lines.map {
+        val splitOnComma: (String) -> List<String> = { line ->
+        line.splitFields(",")
+    }
+        parseLine(it, headerProvider, splitOnComma)
     }
 }
 
