@@ -6,14 +6,14 @@ fun readTableWithHeader(
 ): List<Map<String, String>> {
     val linesAsSequence = lines.asSequence()
     return when {
-        linesAsSequence.isEmpty() -> emptySequence()
+        linesAsSequence.firstOrNull() == null -> emptySequence()
         else ->
             readTable(
                 linesAsSequence.drop(1),
                 headerProviderFrom(lines.first(), splitter),
                 splitter
-            ).toList()
-    }
+            )
+    }.toList()
 }
 
 fun headerProviderFrom(
