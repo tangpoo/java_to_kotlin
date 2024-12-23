@@ -5,7 +5,7 @@ fun readTableWithHeader(lines: List<String>): List<Map<String, String>> {
         lines.isEmpty() -> emptyList()
         else -> readTable(
             lines.drop(1),
-            headerProviderFrom(lines.first()) { header -> header.splitFields(",") }
+            headerProviderFrom(lines.first(), splitOnComma)
         )
     }
 }
