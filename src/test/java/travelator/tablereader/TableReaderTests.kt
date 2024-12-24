@@ -136,6 +136,16 @@ class TableReaderTests {
             )
         }
     }
+
+    @Test
+    fun `empty list if header line but no body`() {
+        assertEquals(
+            emptyList<String>(),
+            readTableWithHeader(
+                listOf("H0,H1")
+            )
+        )
+    }
 }
 
 fun readTableWithHeader(
