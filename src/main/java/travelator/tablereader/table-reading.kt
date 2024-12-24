@@ -3,18 +3,16 @@ package travelator.tablereader
 fun readTableWithHeader(
     lines: Sequence<String>,
     splitter: (String) -> List<String> = splitOnComma
-): Sequence<Map<String, String>> {
-    val firstAndRest = lines.destruct()
-    return when {
-        firstAndRest == null -> emptySequence()
-        else ->
-            readTable(
-                firstAndRest.second,
-                headerProviderFrom(firstAndRest.first, splitter),
-                splitter
-            )
-    }
-}
+): Sequence<Map<String, String>> =
+    lines.destruct()?.let {
+        (first, rest) ->
+        readTable(
+            rest,
+            headerProviderFrom(first, splitter),
+            splitter
+        )
+    } ?: emptySequence()
+
 
 fun headerProviderFrom(
     header: String,
