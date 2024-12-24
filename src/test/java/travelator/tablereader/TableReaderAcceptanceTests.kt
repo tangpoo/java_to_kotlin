@@ -17,7 +17,7 @@ class TableReaderAcceptanceTests {
             "0.0,  1,  1",
             "0.1,1.1,1.2",
             "0.2,1.2,1.4",
-        )
+        ).asSequence()
         val expected = listOf(
             Measurement(0.0, 1.0, 1.0),
             Measurement(0.1, 1.1, 1.2),
