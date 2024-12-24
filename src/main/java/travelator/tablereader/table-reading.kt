@@ -1,14 +1,13 @@
 package travelator.tablereader
 
 fun readTableWithHeader(
-    linesAsSequence: Sequence<String>,
-    lines: List<String>,
+    lines: Sequence<String>,
     splitter: (String) -> List<String>
 ) = when {
-    linesAsSequence.firstOrNull() == null -> emptySequence()
+    lines.firstOrNull() == null -> emptySequence()
     else ->
         readTable(
-            linesAsSequence.drop(1),
+            lines.drop(1),
             headerProviderFrom(lines.first(), splitter),
             splitter
         )
