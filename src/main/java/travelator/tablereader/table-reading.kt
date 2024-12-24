@@ -3,15 +3,18 @@ package travelator.tablereader
 fun readTableWithHeader(
     lines: Sequence<String>,
     splitter: (String) -> List<String> = splitOnComma
-) = when {
-    lines.firstOrNull() == null -> emptySequence()
-    else ->
-        readTable(
-            lines.drop(1),
-            headerProviderFrom(lines.first(), splitter),
-            splitter
-        )
-}.toList()
+) {
+    val firstAndRest = lines.destruct()
+    when {
+        firstAndRest == null -> emptySequence()
+        else ->
+            readTable(
+                firstAndRest.second,
+                headerProviderFrom(firstAndRest.first, splitter),
+                splitter
+            )
+    }.toList()
+}
 
 fun headerProviderFrom(
     header: String,
@@ -51,3 +54,13 @@ private fun parseLine(
 // 빈 문자열의 리스트를 반환하기 때문에 빈 문자열을 별도로 처리할 필요가 있다.
 private fun String.splitFields(separator: String): List<String> =
     if (isEmpty()) emptyList() else split(separator)
+
+fun <T> Sequence<T>.destruct(): Pair<T, Sequence<T>>? {
+    val iterator = this.iterator()
+    return when {
+        iterator.hasNext() ->
+            iterator.next() to iterator.asSequence()
+
+        else -> null
+    }
+}
