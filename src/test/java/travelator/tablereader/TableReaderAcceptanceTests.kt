@@ -31,7 +31,7 @@ class TableReaderAcceptanceTests {
                         record["x"]?.toDoubleOrNull() ?: error("in x"),
                         record["y"]?.toDoubleOrNull() ?: error("in y")
                     )
-                }
+                }.toList()
         )
     }
 }
