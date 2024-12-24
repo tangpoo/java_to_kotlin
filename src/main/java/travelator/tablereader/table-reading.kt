@@ -1,5 +1,7 @@
 package travelator.tablereader
 
+import java.io.StringReader
+
 fun readTableWithHeader(
     lines: Sequence<String>,
     splitter: (String) -> List<String> = splitOnComma
@@ -26,9 +28,14 @@ fun readTable(
     lines: Sequence<String>,
     headerProvider: (Int) -> String = Int::toString,
     splitter: (String) -> List<String> = splitOnComma
-) = lines.map {
+): Sequence<Map<String, String>> = lines.map {
     parseLine(it, headerProvider, splitter)
 }
+
+fun ((String) -> List<String>).readTableWithHeader(
+    reader: StringReader
+): Sequence<Map<String, String>> =
+    readTableWithHeader(reader.buffered().lineSequence(), this)
 
 fun splitOn(separators: String) = { line: String ->
     line.splitFields(separators)

@@ -12,6 +12,7 @@ class CsvExampleTests {
         val x: Double,
         val y: Double,
     )
+
     val fileContents = """
             time,x,y,z
             0.0,  1,  1
@@ -24,6 +25,7 @@ class CsvExampleTests {
         Measurement(0.1, 1.1, 1.2),
         Measurement(0.2, 1.2, 1.4)
     )
+
     @Test
     fun example() {
         reader.useLines { lines ->
@@ -45,6 +47,7 @@ class CsvExampleTests {
             )
         }
     }
+
     @Test
     fun `commons csv`() {
         reader.use { reader ->
@@ -67,6 +70,28 @@ class CsvExampleTests {
             assertEquals(
                 expected,
                 measurements.toList()
+            )
+        }
+    }
+
+    @Test
+    fun `configuration example`() {
+        reader.use { reader ->
+            val measurement =
+                splitOnComma.readTableWithHeader(reader)
+                    .map { record ->
+                        Measurement(
+                            t = record["time"]?.toDoubleOrNull()
+                                ?: error("in time"),
+                            x = record["x"]?.toDoubleOrNull()
+                                ?: error("in x"),
+                            y = record["y"]?.toDoubleOrNull()
+                                ?: error("in y"),
+                        )
+                    }
+            assertEquals(
+                expected,
+                measurement.toList()
             )
         }
     }
