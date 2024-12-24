@@ -145,7 +145,7 @@ fun readTableWithHeader(
     readTableWithHeader(
         lines.asSequence(),
         splitter
-    )
+    ).toList()
 
 
 fun readTable(

@@ -3,9 +3,9 @@ package travelator.tablereader
 fun readTableWithHeader(
     lines: Sequence<String>,
     splitter: (String) -> List<String> = splitOnComma
-) {
+): Sequence<Map<String, String>> {
     val firstAndRest = lines.destruct()
-    when {
+    return when {
         firstAndRest == null -> emptySequence()
         else ->
             readTable(
@@ -13,7 +13,7 @@ fun readTableWithHeader(
                 headerProviderFrom(firstAndRest.first, splitter),
                 splitter
             )
-    }.toList()
+    }
 }
 
 fun headerProviderFrom(
