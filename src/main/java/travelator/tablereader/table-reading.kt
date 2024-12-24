@@ -2,7 +2,7 @@ package travelator.tablereader
 
 fun readTableWithHeader(
     lines: Sequence<String>,
-    splitter: (String) -> List<String>
+    splitter: (String) -> List<String> = splitOnComma
 ) = when {
     lines.firstOrNull() == null -> emptySequence()
     else ->
